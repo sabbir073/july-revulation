@@ -1,4 +1,4 @@
-# Newspaper Project
+# July revulation project
 
 This is a project built using **Next.js 14**, **Node.js 22.x**, **npm 10.9**, **TypeScript**, **Prisma**, and **PostgreSQL** with the latest **Tailwind CSS**.
 
