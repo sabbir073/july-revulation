@@ -1,6 +1,6 @@
 # Newspaper Project
 
-This is a Newspaper project built using **Next.js 14**, **Node.js 22.x**, **npm 10.9**, **TypeScript**, **Prisma**, and **PostgreSQL** with the latest **Tailwind CSS**.
+This is a project built using **Next.js 14**, **Node.js 22.x**, **npm 10.9**, **TypeScript**, **Prisma**, and **PostgreSQL** with the latest **Tailwind CSS**.
 
 ## Getting Started
 
@@ -18,13 +18,13 @@ Before you begin, ensure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/sabbir073/nextjs-newspaper-CMS.git
+   git clone https://github.com/sabbir073/july-revulation.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd nextjs-newspaper-CMS
+   cd july-revulation
    ```
 
 3. Install the dependencies:
@@ -125,7 +125,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Tailwind CSS
 - Prisma
 - PostgreSQL
-
-
-
-inbound rules original 103.209.109.237/32

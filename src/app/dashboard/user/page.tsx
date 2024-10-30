@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import DashboardLayout from "@/components/layouts/DashboardLayout";
+// import DashboardLayout from "@/components/layouts/DashboardLayout";
 import LoadingSpinner from "@/components/LoadingSpinner"; // Import spinner
 
 export default function UserDashboard() {
@@ -34,9 +34,11 @@ export default function UserDashboard() {
   }
 
   return (
-    <DashboardLayout>
+    // <DashboardLayout>
+    <div>
       <h1>User Dashboard</h1>
       <p>Welcome, {session?.user.email}</p>
-    </DashboardLayout>
+      </div>
+    // </DashboardLayout>
   );
 }

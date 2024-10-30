@@ -20,11 +20,11 @@ async function main() {
                 display_name: 'Admin',
             },
             {
-                name: 'Editor User',
-                email: 'editor@example.com',
+                name: 'Vendor User',
+                email: 'vendor@example.com',
                 password: password,
-                role: 'EDITOR',
-                display_name: 'Editor',
+                role: 'VENDOR',
+                display_name: 'Vendor',
             },
             {
                 name: 'Regular User',

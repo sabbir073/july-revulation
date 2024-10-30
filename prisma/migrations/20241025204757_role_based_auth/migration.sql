@@ -1,2 +1,2 @@
 -- AlterEnum
-ALTER TYPE "Role" ADD VALUE 'EDITOR';
+ALTER TYPE "Role" ADD VALUE 'VENDOR';

@@ -6,7 +6,7 @@ import type { NextRequest } from "next/server";
 // Define role-based paths
 const rolePaths: Record<string, string> = {
   ADMIN: "/dashboard/admin",
-  EDITOR: "/dashboard/editor",
+  VENDOR: "/dashboard/vendor",
   USER: "/dashboard/user",
 };
 

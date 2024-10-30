@@ -19,8 +19,8 @@ export default function LoginPage() {
         case "ADMIN":
           router.replace("/dashboard/admin");
           break;
-        case "EDITOR":
-          router.replace("/dashboard/editor");
+        case "VENDOR":
+          router.replace("/dashboard/Vendor");
           break;
         case "USER":
           router.replace("/dashboard/user");

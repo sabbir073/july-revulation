@@ -48,6 +48,6 @@ model Account {
 // Enum for role management
 enum Role {
   ADMIN
-  EDITOR
+  VENDOR
   USER
 }

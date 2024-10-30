@@ -2,7 +2,7 @@
 import { DefaultSession, DefaultUser } from "next-auth";
 
 // Define Role type matching the Prisma schema
-export type Role = "ADMIN" | "EDITOR" | "USER";
+export type Role = "ADMIN" | "VENDOR" | "USER";
 
 declare module "next-auth" {
   interface User extends DefaultUser {

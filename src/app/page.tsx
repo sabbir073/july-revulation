@@ -1,18 +1,17 @@
 // src/app/dashboard/page.tsx (or the relevant path)
-import Image from 'next/image';
 import HomeLayout from '@/components/layouts/HomeLayout';
+import Slider from '../components/common/Slider';
+import Counter from '../components/common/Counter';
+import ListWithFilters from '../components/common/ListWithFilters';
+import HeroSection from '../components/common/HeroSection';
 
 export default function DashboardPage() {
   return (
     <HomeLayout>
-      <h1>Hello</h1>
-      <Image
-        src={`${process.env.NEXT_IMAGE_URL}/selfie.png`}
-        alt="Selfie"
-        width={300}
-        height={300}
-        priority // Optional: Loads the image with higher priority
-      />
+      <Slider />
+      <Counter />
+      <ListWithFilters />
+      <HeroSection />
     </HomeLayout>
   );
 }
