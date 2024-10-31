@@ -1,15 +1,20 @@
-/*
-  Warnings:
-
-  - The `role` column on the `User` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-
-*/
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'VENDOR', 'USER');
 
--- AlterTable
-ALTER TABLE "User" DROP COLUMN "role",
-ADD COLUMN     "role" "Role" NOT NULL DEFAULT 'USER';
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
+    "display_name" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "forget_password_token" TEXT,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Session" (
@@ -33,6 +38,9 @@ CREATE TABLE "Account" (
 
     CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");

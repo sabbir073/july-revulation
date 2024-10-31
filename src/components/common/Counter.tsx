@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react";
 
 const counters = [
-  { title: "Total Martyrs", count: 1500, color: "bg-red-100", textColor: "text-red-700" },
-  { title: "Listed Martyrs", count: 650, color: "bg-pink-100", textColor: "text-red-700" },
-  { title: "Total Injured", count: 33000, color: "bg-yellow-100", textColor: "text-orange-700" },
-  { title: "Verified Injured", count: 10000, color: "bg-gray-100", textColor: "text-gray-700" },
+  { title: "Total Martyrs", count: 1500, color: "bg-red-300", textColor: "text-gray-800" }, // Lighter Red
+  { title: "Listed Martyrs", count: 650, color: "bg-purple-300", textColor: "text-gray-800" }, // Lighter Purple
+  { title: "Total Injured", count: 33000, color: "bg-yellow-200", textColor: "text-gray-800" }, // Lighter Yellow
+  { title: "Verified Injured", count: 10000, color: "bg-blue-300", textColor: "text-gray-800" }, // Lighter Blue
 ];
+
+
+
 
 const CounterCard: React.FC<{ title: string; count: number; color: string; textColor: string }> = ({
   title,
