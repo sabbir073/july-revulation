@@ -3,11 +3,26 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const images = [
-    { src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/1.webp`, alt: "Slide 1" },
-    { src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/2.jpg`, alt: "Slide 2" },
-    { src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/3.jpg`, alt: "Slide 3" },
-  ];
+const slides = [
+  {
+    src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/1.webp`,
+    alt: "Slide 1",
+    title: "Heroes Never Die!",
+    subtitle: "Remembering their sacrifices for our future.",
+  },
+  {
+    src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/2.jpg`,
+    alt: "Slide 2",
+    title: "Legacy of Bravery",
+    subtitle: "Honoring those who stood for freedom.",
+  },
+  {
+    src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/3.jpg`,
+    alt: "Slide 3",
+    title: "In Their Memory",
+    subtitle: "Their courage inspires generations.",
+  },
+];
 
 const Slider: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -15,7 +30,7 @@ const Slider: React.FC = () => {
   // Automatically change the slide every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -24,7 +39,7 @@ const Slider: React.FC = () => {
   return (
     <div className="relative w-full h-[500px]">
       {/* Image Slider */}
-      {images.map((image, index) => (
+      {slides.map((slide, index) => (
         <div
           key={index}
           className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -32,8 +47,8 @@ const Slider: React.FC = () => {
           }`}
         >
           <Image
-            src={image.src}
-            alt={image.alt}
+            src={slide.src}
+            alt={slide.alt}
             layout="fill"
             objectFit="cover"
             priority={true}
@@ -46,12 +61,12 @@ const Slider: React.FC = () => {
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
       {/* Centered Text and Button Overlay */}
-      <div className="absolute inset-0 flex flex-col justify-center items-center text-center">
+      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
         <h1 className="text-white text-4xl md:text-6xl font-bold mb-4">
-          Heroes Never Dies!
+          {slides[currentIndex].title}
         </h1>
         <p className="text-white text-lg md:text-xl mb-6">
-          Enjoy seamless transitions with stunning visuals.
+          {slides[currentIndex].subtitle}
         </p>
         <button className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600">
           Submit

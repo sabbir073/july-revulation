@@ -46,7 +46,7 @@ const Header: React.FC = () => {
     <header className="relative w-full">
       {/* Topbar */}
       <div
-        className={`bg-red-500 text-white text-base py-2 hidden md:block ${
+        className={`bg-[#b71c1c] text-white text-base py-2 hidden md:block ${
           isSticky ? "hidden" : "block"
         }`}
       >
@@ -72,7 +72,7 @@ const Header: React.FC = () => {
 
       {/* Navbar */}
       <nav
-        className={`gradient-bg sticky top-0 z-50 py-4 transition-all ${
+        className={`bg-[#2e7d32] sticky top-0 z-50 py-4 transition-all ${
           isSticky ? "py-2 shadow-md" : ""
         }`}
       >

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gradient-to-r from-green-500 via-red-500 to-green-500">
+    <footer className="bg-[#2e7d32]">
       <div className="mx-auto w-full max-w-screen-xl p-6 lg:py-8">
         <div className="md:flex md:justify-between items-center">
           {/* Logo Section */}
