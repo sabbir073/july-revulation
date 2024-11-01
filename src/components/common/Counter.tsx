@@ -9,9 +9,6 @@ const counters = [
   { title: "Verified Injured", count: 10000, color: "bg-blue-300", textColor: "text-gray-800" }, // Lighter Blue
 ];
 
-
-
-
 const CounterCard: React.FC<{ title: string; count: number; color: string; textColor: string }> = ({
   title,
   count,
@@ -40,8 +37,12 @@ const CounterCard: React.FC<{ title: string; count: number; color: string; textC
     <div
       className={`flex flex-col items-center justify-center p-6 rounded-lg shadow-lg ${color} w-full h-48`}
     >
-      <h3 className={`text-2xl font-bold mb-4 ${textColor}`}>{title.toUpperCase()}</h3>
-      <p className={`text-5xl font-extrabold ${textColor}`}>{currentCount.toLocaleString()}+</p>
+      <h3 className={`text-xs sm:text-xl md:text-2xl font-bold mb-4 ${textColor}`}>
+        {title.toUpperCase()}
+      </h3>
+      <p className={`text-4xl sm:text-5xl md:text-5xl font-extrabold ${textColor}`}>
+        {currentCount.toLocaleString()}+
+      </p>
     </div>
   );
 };
@@ -49,7 +50,7 @@ const CounterCard: React.FC<{ title: string; count: number; color: string; textC
 const Counter: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {counters.map((counter, index) => (
           <CounterCard
             key={index}

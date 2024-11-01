@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-// import DashboardLayout from "@/components/layouts/DashboardLayout";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
 import LoadingSpinner from "@/components/LoadingSpinner"; // Import the spinner
 
 export default function VendorDashboard() {
@@ -32,9 +32,9 @@ export default function VendorDashboard() {
   }
 
   return (
-    <div>
+    <DashboardLayout>
       <h1>Vendor Dashboard</h1>
       <p>Welcome, {session?.user.email}</p>
-    </div>
+    </DashboardLayout>
   );
 }

@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Links Grid */}
-          <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+          <div className="grid grid-cols-3 gap-8 sm:gap-6 text-sm sm:text-base">
             <div>
               <h2 className="mb-6 text-sm font-semibold text-white uppercase">
                 Resources
@@ -89,7 +89,10 @@ const Footer: React.FC = () => {
 
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className="text-sm text-gray-100 sm:text-center">
-            © 2023. All Rights Reserved.
+            © 2024. All Rights Reserved. | Developed by{" "}
+            <Link href="https://mdsabbirahmed.com" target="_blank" className="text-blue-400 hover:underline">
+              Md Sabbir Ahmed
+            </Link>
           </span>
 
           {/* Social Media Icons */}

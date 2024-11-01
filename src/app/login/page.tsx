@@ -4,7 +4,9 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import LoginLayout from "@/components/layouts/LoginLayout";
-import LoadingSpinner from "@/components/LoadingSpinner"; // Import the spinner
+import LoadingSpinner from "@/components/LoadingSpinner";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,7 +22,7 @@ export default function LoginPage() {
           router.replace("/dashboard/admin");
           break;
         case "VENDOR":
-          router.replace("/dashboard/Vendor");
+          router.replace("/dashboard/vendor");
           break;
         case "USER":
           router.replace("/dashboard/user");
@@ -53,18 +55,37 @@ export default function LoginPage() {
     }
   };
 
-  // **Show spinner if session status is loading or authenticated** to prevent flickering.
+  // Show spinner if session status is loading or authenticated
   if (status === "loading" || status === "authenticated") {
     return <LoadingSpinner />;
   }
 
-  // Render the login form only when the user is unauthenticated.
+  // Render the login form only when the user is unauthenticated
   if (status === "unauthenticated") {
     return (
       <LoginLayout>
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-          <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+        <div className="flex flex-col items-center min-h-screen bg-gray-100 pt-8">
+          {/* Logo Positioned Outside and Centered */}
+          <div className="mb-6">
+            <Image
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.jpg`}
+              alt="Logo"
+              width={180} // Adjust as needed
+              height={150} // Adjust as needed
+            />
+          </div>
+
+          {/* Login Card */}
+          <div className="relative w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+            {/* Back to Home Link */}
+            <div className="absolute top-4 left-4">
+              <Link href="/" className="text-indigo-500 hover:underline">
+                &larr; Back to Home
+              </Link>
+            </div>
+
             <h1 className="mb-6 text-2xl font-semibold text-center text-gray-700">Login</h1>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="email"
@@ -88,11 +109,21 @@ export default function LoginPage() {
               </button>
               {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
             </form>
+
+            {/* Register and Forget Password Links */}
+            <div className="flex justify-between mt-4 text-sm text-indigo-500">
+              <Link href="/register" className="hover:underline">
+                Register
+              </Link>
+              <Link href="/forget-password" className="hover:underline">
+                Forget Password?
+              </Link>
+            </div>
           </div>
         </div>
       </LoginLayout>
     );
   }
 
-  return null; // Prevent rendering anything if session status is undefined.
+  return null; // Prevent rendering anything if session status is undefined
 }

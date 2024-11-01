@@ -1,4 +1,4 @@
-// schema.prisma
+// prisma/schema.prisma
 
 datasource db {
   provider = "postgresql"
@@ -11,17 +11,113 @@ generator client {
 
 // User model with role management
 model User {
-  id                    Int      @id @default(autoincrement())
+  id                    Int             @id @default(autoincrement())
   name                  String
-  email                 String   @unique
-  password              String   // Store bcrypt hashed password
-  role                  Role     @default(USER) // Role-based access
+  email                 String          @unique
+  password              String          // Store bcrypt hashed password
+  role                  Role            @default(USER) // Role-based access
   display_name          String?
-  created_at            DateTime @default(now())
-  updated_at            DateTime @updatedAt
+  created_at            DateTime        @default(now())
+  updated_at            DateTime        @updatedAt
   sessions              Session[]
   accounts              Account[]
-  forget_password_token String?  // Password recovery flow
+  people_submissions    People[]        @relation("UserSubmissions") // Link to People created by user
+  created_occupations   Occupation[]
+  created_institutions  Institution[]
+  created_locations     IncidentLocation[]
+  created_stories       Story[]
+  created_galleries     PhotoGallery[]
+  created_documentaries Documentary[]
+}
+
+// People table for information about individuals in the system
+model People {
+  id                    Int                @id @default(autoincrement())
+  name                  String
+  age                   Int?
+  occupation            Occupation?        @relation(fields: [occupation_id], references: [id])
+  occupation_id         Int?
+  institution           Institution?       @relation(fields: [institution_id], references: [id])
+  institution_id        Int?
+  address               String?
+  fathers_name          String?
+  mothers_name          String?
+  date                  DateTime?
+  how_died              String?
+  how_injured           String?
+  story                 String?
+  family_member_contact String?
+  profile_picture       String?            // Single profile picture
+  gallery               String[]           @default([])
+  incident_location     IncidentLocation?  @relation(fields: [incident_location_id], references: [id])
+  incident_location_id  Int?
+  incident_type         IncidentType       // Enum for Death or Injured
+  status                Status             @default(PENDING) // Pending or Verified
+  documentary           String?
+  created_at            DateTime           @default(now())
+  updated_at            DateTime           @updatedAt
+  submitted_by          User               @relation("UserSubmissions", fields: [submitted_by_id], references: [id])
+  submitted_by_id       Int
+}
+
+// Supporting tables for admin-controlled data
+model Occupation {
+  id                    Int       @id @default(autoincrement())
+  title                 String
+  created_by            User      @relation(fields: [created_by_id], references: [id])
+  created_by_id         Int
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+  people                People[]
+}
+
+model Institution {
+  id                    Int       @id @default(autoincrement())
+  title                 String
+  created_by            User      @relation(fields: [created_by_id], references: [id])
+  created_by_id         Int
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+  people                People[]
+}
+
+model Story {
+  id                    Int       @id @default(autoincrement())
+  title                 String
+  description           String
+  image_url             String?
+  created_by            User      @relation(fields: [created_by_id], references: [id])
+  created_by_id         Int
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+}
+
+model PhotoGallery {
+  id                    Int       @id @default(autoincrement())
+  gallery_images        String[]  // Array of image names
+  created_by            User      @relation(fields: [created_by_id], references: [id])
+  created_by_id         Int
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+}
+
+model IncidentLocation {
+  id                    Int       @id @default(autoincrement())
+  title                 String
+  created_by            User      @relation(fields: [created_by_id], references: [id])
+  created_by_id         Int
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+  people                People[]
+}
+
+model Documentary {
+  id                    Int       @id @default(autoincrement())
+  url                   String
+  created_by            User      @relation(fields: [created_by_id], references: [id])
+  created_by_id         Int
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
 }
 
 // Session model for NextAuth.js
@@ -33,7 +129,7 @@ model Session {
   sessionToken String   @unique
 }
 
-// OAuth account model (optional for future integrations)
+// OAuth account model for NextAuth.js
 model Account {
   id                 Int      @id @default(autoincrement())
   userId             Int
@@ -45,9 +141,19 @@ model Account {
   expires_at         Int?
 }
 
-// Enum for role management
+// Enums
 enum Role {
   ADMIN
   VENDOR
   USER
+}
+
+enum IncidentType {
+  DEATH
+  INJURED
+}
+
+enum Status {
+  PENDING
+  VERIFIED
 }
