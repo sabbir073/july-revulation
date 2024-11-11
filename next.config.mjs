@@ -6,6 +6,10 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'd1d5tqaqgxfrly.cloudfront.net',
           },
+          {
+            protocol: 'https',
+            hostname: 'jrabd.org',
+          },
         ],
       },
 };
