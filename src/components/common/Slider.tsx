@@ -49,8 +49,8 @@ const Slider: React.FC = () => {
           <Image
             src={slide.src}
             alt={slide.alt}
-            layout="fill"
-            objectFit="cover"
+            fill={true}
+            style={{objectFit: "cover"}}
             priority={true}
             className="w-full h-full object-cover"
           />

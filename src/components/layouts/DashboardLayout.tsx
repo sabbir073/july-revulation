@@ -70,7 +70,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       >
         <div className="p-6 pt-4 flex justify-between items-center">
           <Image
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.jpg`}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.png`}
             alt="Logo"
             width={150}
             height={50}

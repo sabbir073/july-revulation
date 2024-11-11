@@ -80,7 +80,7 @@ const Header: React.FC = () => {
           {/* Logo */}
           <Link href="/" passHref>
           <Image
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.jpg`}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.png`}
             alt="Logo"
             width={150}
             height={50}
@@ -208,7 +208,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center p-4">
           <Link href="/" passHref>
             <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.jpg`}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.png`}
               alt="Logo"
               width={120}
               height={40}

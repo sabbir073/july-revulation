@@ -9,8 +9,8 @@ const HeroSection: React.FC = () => {
       <Image
         src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/bannerBg.png`} // Replace with your actual image URL
         alt="Hero Background"
-        layout="fill"
-        objectFit="cover"
+        fill={true}
+        style={{objectFit: "cover"}}
         className="object-cover"
         priority={true}
       />

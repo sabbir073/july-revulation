@@ -68,7 +68,7 @@ export default function LoginPage() {
           {/* Logo Positioned Outside and Centered */}
           <div className="mb-6">
             <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.jpg`}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.png`}
               alt="Logo"
               width={180} // Adjust as needed
               height={150} // Adjust as needed

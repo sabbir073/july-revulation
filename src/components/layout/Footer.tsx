@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           {/* Logo Section */}
           <div className="mb-8 md:mb-0 flex justify-center md:justify-start">
             <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.jpg`}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.png`}
               alt="Logo"
               width={150}
               height={50}
