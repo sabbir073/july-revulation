@@ -43,8 +43,8 @@ model People {
   fathers_name          String?
   mothers_name          String?
   date                  DateTime?
-  how_died              String?
-  how_injured           String?
+  date_of_death         DateTime?
+  gender                String?
   story                 String?
   family_member_contact String?
   profile_picture       String?            // Single profile picture

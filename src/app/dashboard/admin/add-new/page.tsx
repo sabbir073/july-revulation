@@ -12,8 +12,11 @@ import Swal from "sweetalert2";
 const INCIDENT_TYPES = ["DEATH", "INJURED"] as const;
 const STATUS_TYPES = ["PENDING", "VERIFIED"] as const;
 
+const GENDER_TYPES = ["MALE", "FEMALE", "THIRD GENDER"] as const;
+
 type IncidentType = typeof INCIDENT_TYPES[number];
 type StatusType = typeof STATUS_TYPES[number];
+type GenderType = typeof GENDER_TYPES[number];
 
 interface Occupation {
   id: number;
@@ -45,8 +48,8 @@ export default function AdminAddNewPeople() {
     fathers_name: "",
     mothers_name: "",
     date: "",
-    how_died: "",
-    how_injured: "",
+    date_of_death: "",
+    gender: "" as GenderType,
     story: "",
     family_member_contact: "",
     profile_picture: null as File | null,
@@ -143,8 +146,8 @@ export default function AdminAddNewPeople() {
           fathers_name: "",
           mothers_name: "",
           date: "",
-          how_died: "",
-          how_injured: "",
+          date_of_death: "",
+          gender: "" as GenderType,
           story: "",
           family_member_contact: "",
           profile_picture: null,
@@ -190,8 +193,14 @@ export default function AdminAddNewPeople() {
               { label: "Father's Name", name: "fathers_name", type: "text", placeholder: "Father's name" },
               { label: "Mother's Name", name: "mothers_name", type: "text", placeholder: "Mother's name" },
               { label: "Incident Date", name: "date", type: "date" },
-              { label: "How Died", name: "how_died", type: "text", placeholder: "How died" },
-              { label: "How Injured", name: "how_injured", type: "text", placeholder: "How injured" },
+              { label: "Date Of Death", name: "date_of_death", type: "date" },
+              {
+                label: "Gender",
+                name: "gender",
+                type: "select",
+                options: GENDER_TYPES.map((gn) => ({ value: gn, label: gn })),
+                required: true,
+              },
               { label: "Family Contact", name: "family_member_contact", type: "text", placeholder: "Family contact" },
               {
                 label: "Incident Location",

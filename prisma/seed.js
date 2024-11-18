@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 async function main() {
     // Hash passwords
-    const password = await bcrypt.hash('DemoPassword123!', 10);
+    const password = await bcrypt.hash('jrabd2024@', 10);
 
     // Create Admin User and retrieve the ID for later use
     const admin = await prisma.user.create({
@@ -37,6 +37,34 @@ async function main() {
                 role: 'USER',
                 display_name: 'User',
             },
+            {
+                name: 'Fantasir Mahmud',
+                email: 'fantasirmahmud321@gmail.com',
+                password: password,
+                role: 'ADMIN',
+                display_name: 'Fantasir',
+            },
+            {
+                name: 'Saleh Mahmud',
+                email: 'salehmahamudr@gmail.com',
+                password: password,
+                role: 'ADMIN',
+                display_name: 'Saleh',
+            },
+            {
+                name: 'Atikur Rahman Asif',
+                email: 'asif.s.eyes@gmail.com',
+                password: password,
+                role: 'ADMIN',
+                display_name: 'Asif',
+            },
+            {
+                name: 'Faisal Mahmud',
+                email: 'bohemianfaisal@gmail.com',
+                password: password,
+                role: 'ADMIN',
+                display_name: 'Faisal',
+            }
         ],
     });
     console.log('Users created successfully');
