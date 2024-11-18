@@ -56,7 +56,7 @@ async function uploadFileToS3(file: File, folder: string): Promise<string> {
 export async function POST(req: Request) {
   const formData = await req.formData();
   const profilePicture = formData.get("profile_picture") as File | null;
-  const galleryFiles = formData.getAll("gallery") as File[];
+  const galleryFiles = formData.getAll("gallery") as File[]; // Get all files with the name "gallery"
 
   const uploadedFileNames = { profileName: "", galleryNames: [] as string[] };
 
@@ -67,10 +67,13 @@ export async function POST(req: Request) {
   }
 
   // Upload gallery files
-  for (const file of galleryFiles) {
-    const galleryFileName = await uploadFileToS3(file, "gallery");
-    uploadedFileNames.galleryNames.push(galleryFileName);
+  if (galleryFiles.length > 0) {
+    for (const file of galleryFiles) {
+      const galleryFileName = await uploadFileToS3(file, "gallery");
+      uploadedFileNames.galleryNames.push(galleryFileName);
+    }
   }
 
   return NextResponse.json({ success: true, ...uploadedFileNames });
 }
+

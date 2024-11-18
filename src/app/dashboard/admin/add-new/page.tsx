@@ -1,4 +1,4 @@
-// app/components/AdminAddNewPeople.tsx
+// app/dashboard/admin/AdminAddNewPeople.tsx
 
 "use client";
 
@@ -103,19 +103,25 @@ export default function AdminAddNewPeople() {
   };
 
   const handleSubmit = async () => {
-    const fileUploadResponse = await uploadFilesToS3(formData);
-    if (!fileUploadResponse.success) {
-      Swal.fire("Error", fileUploadResponse.message, "error");
-      return;
+    let fileUploadResponse = { success: true, profileName: null, galleryNames: [], message: "" };
+  
+    // Check if there are files to upload
+    if (formData.profile_picture || formData.gallery.length > 0) {
+      fileUploadResponse = await uploadFilesToS3(formData);
+      if (!fileUploadResponse.success) {
+        Swal.fire("Error", fileUploadResponse.message || "An error occurred during file upload.", "error");
+        return;
+      }
     }
-
+  
+    // Prepare submission data
     const submissionData = {
       ...formData,
-      profile_picture: fileUploadResponse.profileName,
-      gallery: fileUploadResponse.galleryNames,
-      submitted_by_id: session?.user.id,
+      profile_picture: fileUploadResponse.profileName, // Will be null if not uploaded
+      gallery: fileUploadResponse.galleryNames, // Ensure this is passed as an array of file names
+      submitted_by_id: Number(session?.user.id), // Convert submitted_by_id to an integer
     };
-
+  
     try {
       const response = await fetch("/api/people", {
         method: "POST",
@@ -124,9 +130,10 @@ export default function AdminAddNewPeople() {
         },
         body: JSON.stringify(submissionData),
       });
-
+  
       if (response.ok) {
         Swal.fire("Success", "Data submitted successfully!", "success");
+        // Reset the form data
         setFormData({
           name: "",
           age: "",
@@ -152,6 +159,7 @@ export default function AdminAddNewPeople() {
       }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.log(error);
       Swal.fire("Error", "An error occurred while submitting the data.", "error");
     }
   };
@@ -178,10 +186,10 @@ export default function AdminAddNewPeople() {
                 type: "select",
                 options: institutions.map((inst) => ({ value: inst.id, label: inst.title })),
               },
-              { label: "Address", name: "address", type: "text", placeholder: "Enter address" },
+              { label: "Home Address", name: "address", type: "text", placeholder: "Enter address" },
               { label: "Father's Name", name: "fathers_name", type: "text", placeholder: "Father's name" },
               { label: "Mother's Name", name: "mothers_name", type: "text", placeholder: "Mother's name" },
-              { label: "Date", name: "date", type: "date" },
+              { label: "Incident Date", name: "date", type: "date" },
               { label: "How Died", name: "how_died", type: "text", placeholder: "How died" },
               { label: "How Injured", name: "how_injured", type: "text", placeholder: "How injured" },
               { label: "Family Contact", name: "family_member_contact", type: "text", placeholder: "Family contact" },
@@ -259,7 +267,6 @@ export default function AdminAddNewPeople() {
                 name="profile_picture"
                 onChange={handleFileChange}
                 accept="image/*"
-                required
                 className="w-full border border-red-200 rounded-md px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-400"
               />
             </div>
@@ -295,11 +302,18 @@ export default function AdminAddNewPeople() {
 }
 
 // S3 upload function
+// Modify the uploadFilesToS3 function to handle empty files
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function uploadFilesToS3(formData: any) {
   const form = new FormData();
-  form.append("profile_picture", formData.profile_picture);
-  formData.gallery.forEach((file: File, index: number) => form.append(`gallery_${index}`, file));
+
+  // Only append files if they exist
+  if (formData.profile_picture) {
+    form.append("profile_picture", formData.profile_picture);
+  }
+  if (formData.gallery.length > 0) {
+    formData.gallery.forEach((file: File) => form.append("gallery", file)); // Use "gallery" as a single field name
+  }
 
   const response = await fetch("/api/upload", {
     method: "POST",
@@ -308,3 +322,4 @@ async function uploadFilesToS3(formData: any) {
 
   return response.json();
 }
+
