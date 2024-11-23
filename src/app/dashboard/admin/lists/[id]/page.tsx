@@ -7,6 +7,9 @@ import DashboardLayout from "@/components/layouts/DashboardLayout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { format } from "date-fns";
 import Image from "next/image";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import ReactPlayer from "react-player";
 
 interface Person {
     id: number;
@@ -40,13 +43,15 @@ export default function PersonProfile() {
     const [person, setPerson] = useState<Person | null>(null);
     const [loading, setLoading] = useState(true);
 
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
     useEffect(() => {
         if (status === "unauthenticated") {
             router.replace("/login");
         } else if (status === "authenticated" && session?.user.role === "ADMIN") {
-            fetchPersonData(); // Fetch person data on load
+            fetchPersonData();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status, router, session]);
 
     const fetchPersonData = async () => {
@@ -71,152 +76,185 @@ export default function PersonProfile() {
     if (status === "loading" || loading) return <LoadingSpinner />;
     if (status === "unauthenticated" || session?.user.role !== "ADMIN") return null;
 
-    const imageUrl = person?.profile_picture 
-    ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${person.profile_picture}`
-    : `${process.env.NEXT_PUBLIC_IMAGE_URL}/placeholder.png`;
+    const imageUrl = person?.profile_picture
+        ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${person.profile_picture}`
+        : `${process.env.NEXT_PUBLIC_IMAGE_URL}/placeholder.png`;
+
+    const galleryImages =
+        person?.gallery?.map((img) => ({
+            src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/${img}`,
+        })) || [];
 
     return (
         <DashboardLayout>
-    <div className="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Profile Card */}
-        <div className="lg:col-span-1 bg-white shadow-lg rounded-lg p-6 h-auto sticky top-6 self-start">
-            {person?.profile_picture && (
-                <Image
-                    src={imageUrl}
-                    alt={person.name || "Profile Image"}
-                    width={300}
-                    height={300}
-                    className="w-full max-w-xs mx-auto rounded-full mb-4"
-                />
-            )}
-            <h2 className="text-xl font-bold text-center mb-4">{person?.name}</h2>
-
-            <div className="w-full border border-gray-200 rounded-lg overflow-hidden">
-                <div className="grid grid-cols-5">
-                    <div className="bg-red-100 p-2 font-semibold col-span-2">Age:</div>
-                    <div className="bg-gray-50 p-2 col-span-3">{person?.age || "N/A"}</div>
-
-                    <div className="bg-blue-100 p-2 font-semibold col-span-2">Occupation:</div>
-                    <div className="bg-gray-50 p-2 col-span-3">{person?.occupation?.title || "N/A"}</div>
-
-                    <div className="bg-purple-100 p-2 font-semibold col-span-2">Institution:</div>
-                    <div className="bg-gray-50 p-2 col-span-3">{person?.institution?.title || "N/A"}</div>
-
-                    <div className="bg-yellow-100 p-2 font-semibold col-span-2">Incident Type:</div>
-                    <div className="bg-gray-50 p-2 col-span-3">{person?.incident_type || "N/A"}</div>
-                </div>
-            </div>
-        </div>
-
-        {/* Right Detail Cards */}
-        <div className="lg:col-span-2 space-y-6 overflow-y-auto">
-            {/* Row 1 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Date of Incident:</strong> <br />
-                    {person?.date ? formatDate(person.date) : "N/A"}
-                </div>
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Fathers Name:</strong> <br />
-                    {person?.fathers_name || "N/A"}
-                </div>
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Mothers Name:</strong> <br />
-                    {person?.mothers_name || "N/A"}
-                </div>
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Address:</strong> <br />
-                    {person?.address || "N/A"}
-                </div>
-            </div>
-
-            {/* Row 2 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {person?.how_died && (
-                    <div className="bg-gray-100 p-4 rounded shadow">
-                        <strong>How Died:</strong> <br />
-                        {person.how_died}
-                    </div>
-                )}
-                {person?.how_injured && (
-                    <div className="bg-gray-100 p-4 rounded shadow">
-                        <strong>How Injured:</strong> <br />
-                        {person.how_injured}
-                    </div>
-                )}
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Family Contact:</strong> <br />
-                    {person?.family_member_contact || "N/A"}
-                </div>
-            </div>
-
-            {/* Row 3 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Incident Location:</strong> <br />
-                    {person?.incident_location?.title || "N/A"}
-                </div>
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Status:</strong> <br />
-                    {person?.status}
-                </div>
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Story:</strong> <br />
-                    {person?.story || "N/A"}
-                </div>
-            </div>
-
-            {/* Gallery */}
-            <div className="bg-gray-100 p-4 rounded shadow">
-                <strong>Gallery:</strong>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">
-                    {person?.gallery.map((img, index) => (
+            <div className="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Left Profile Card */}
+                <div className="lg:col-span-1 bg-white shadow-lg rounded-lg p-6 h-auto lg:sticky lg:top-6 lg:self-start">
+                    {person?.profile_picture && (
                         <Image
-                            key={index}
-                            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${img}`}
-                            alt={`Gallery Image ${index + 1}`}
-                            width={150}
-                            height={150}
-                            className="object-cover rounded"
+                            src={imageUrl}
+                            alt={person?.name || "Profile Image"}
+                            width={250}
+                            height={250}
+                            className="w-[250px] h-[250px] object-cover rounded-full mx-auto mb-4"
                         />
-                    ))}
+                    )}
+                    <h2 className="text-xl font-bold text-center mb-4">{person?.name}</h2>
+
+                    <div className="w-full border border-gray-200 rounded-lg overflow-hidden text-lg">
+                        <div className="grid grid-cols-6">
+                            <div className="bg-red-200 p-2 font-semibold col-span-3">Age:</div>
+                            <div className="bg-gray-50 p-2 col-span-3">{person?.age || "N/A"}</div>
+
+                            <div className="bg-blue-200 p-2 font-semibold col-span-3">Occupation:</div>
+                            <div className="bg-gray-50 p-2 col-span-3">{person?.occupation?.title || "N/A"}</div>
+
+                            <div className="bg-purple-200 p-2 font-semibold col-span-3">Institution:</div>
+                            <div className="bg-gray-50 p-2 col-span-3">{person?.institution?.title || "N/A"}</div>
+
+                            <div className="bg-yellow-200 p-2 font-semibold col-span-3">Incident Type:</div>
+                            <div className="bg-gray-50 p-2 col-span-3">{person?.incident_type || "N/A"}</div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Detail Cards */}
+                <div className="lg:col-span-2 space-y-4 text-lg">
+                    {/* Individual Cards */}
+                    {person?.date && (
+                        <div className="bg-[#fecaca] p-4 rounded shadow-lg flex">
+                            <div className="w-[200px] font-semibold text-left">Date of Incident:</div>
+                            <div className="flex-1 text-left">{formatDate(person.date)}</div>
+                        </div>
+                    )}
+                    {person?.fathers_name && (
+                        <div className="bg-[#fde68a] p-4 rounded shadow-lg flex">
+                            <div className="w-[200px] font-semibold text-left">Fathers Name:</div>
+                            <div className="flex-1 text-left">{person.fathers_name}</div>
+                        </div>
+                    )}
+                    {person?.mothers_name && (
+                        <div className="bg-[#bbf7d0] p-4 rounded shadow-lg flex">
+                            <div className="w-[200px] font-semibold text-left">Mothers Name:</div>
+                            <div className="flex-1 text-left">{person.mothers_name}</div>
+                        </div>
+                    )}
+                    {person?.address && (
+                        <div className="bg-[#d9f99d] p-4 rounded shadow-lg flex">
+                            <div className="w-[200px] font-semibold text-left">Address:</div>
+                            <div className="flex-1 text-left">{person.address}</div>
+                        </div>
+                    )}
+                    {person?.family_member_contact && (
+                        <div className="bg-[#e9d5ff] p-4 rounded shadow-lg flex">
+                            <div className="w-[200px] font-semibold text-left">Family Contact:</div>
+                            <div className="flex-1 text-left">{person.family_member_contact}</div>
+                        </div>
+                    )}
+                    {person?.incident_location?.title && (
+                        <div className="bg-[#cffafe] p-4 rounded shadow-lg flex">
+                            <div className="w-[200px] font-semibold text-left">Incident Location:</div>
+                            <div className="flex-1 text-left">{person.incident_location.title}</div>
+                        </div>
+                    )}
+                    {person?.status && (
+                        <div className="bg-[#ede9fe] p-4 rounded shadow-lg flex">
+                            <div className="w-[200px] font-semibold text-left">Status:</div>
+                            <div className="flex-1 text-left">{person.status}</div>
+                        </div>
+                    )}
+                    {person?.story && (
+                        <div className="bg-gray-300 p-4 rounded shadow-lg">
+                            <h3 className="font-semibold text-lg mb-2">Story:</h3>
+                            <p className="text-base text-lg">{person.story}</p>
+                        </div>
+                    )}
+                    {person?.gallery && person.gallery.length > 0 && (
+                        <div className="bg-gray-100 p-4 rounded shadow-lg">
+                            <strong className="text-lg font-bold">Gallery:</strong>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">
+                                {person.gallery.map((img, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => {
+                                            setCurrentImageIndex(index);
+                                            setLightboxOpen(true);
+                                        }}
+                                        className="p-2"
+                                    >
+                                        <Image
+                                            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${img}`}
+                                            alt={`Gallery Image ${index + 1}`}
+                                            width={300}
+                                            height={200}
+                                            className="w-[300px] h-[150px] object-cover rounded-[10px] border border-red-600"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {lightboxOpen && (
+                        <Lightbox
+                            open={lightboxOpen}
+                            close={() => setLightboxOpen(false)}
+                            slides={galleryImages}
+                            index={currentImageIndex}
+                            on={{
+                                click: ({ index }) => {
+                                    if (typeof index === "number") {
+                                        setCurrentImageIndex(index);
+                                    }
+                                },
+                            }}
+                        />
+                    )}
+                    {person?.documentary && (
+                        <div className="bg-gray-100 p-4 rounded shadow-lg">
+                            <strong className="text-lg font-bold">Documentary:</strong>
+                            <div className="mt-4">
+                                <ReactPlayer
+                                    url={convertToEmbedUrl(person.documentary)}
+                                    width="100%"
+                                    height="315px"
+                                    controls={true} // Adds play/pause controls
+                                    playing={false} // Prevent auto-play
+                                    className="rounded"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Cards for Created, Updated, Submitted By */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
+                            <h3 className="font-semibold">Created At</h3>
+                            <p>{formatDate(person?.created_at || "")}</p>
+                        </div>
+                        <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
+                            <h3 className="font-semibold">Updated At</h3>
+                            <p>{formatDate(person?.updated_at || "")}</p>
+                        </div>
+                        <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
+                            <h3 className="font-semibold">Submitted By</h3>
+                            <p>{person?.submitted_by.name}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            {/* Documentary */}
-            {person?.documentary && (
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Documentary:</strong>
-                    <iframe
-                        width="100%"
-                        height="315"
-                        src={person.documentary}
-                        title="Documentary Video"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        className="rounded"
-                    ></iframe>
-                </div>
-            )}
-
-            {/* Submission Details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Created At:</strong> <br />
-                    {person?.created_at ? formatDate(person.created_at) : "N/A"}
-                </div>
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Updated At:</strong> <br />
-                    {person?.updated_at ? formatDate(person.updated_at) : "N/A"}
-                </div>
-                <div className="bg-gray-100 p-4 rounded shadow">
-                    <strong>Submitted By:</strong> <br />
-                    {person?.submitted_by.name || "N/A"}
-                </div>
-            </div>
-        </div>
-    </div>
-</DashboardLayout>
-
+        </DashboardLayout>
     );
+}
+
+// Utility function to convert YouTube URL to embeddable URL
+// Utility function to ensure the URL is embeddable
+function convertToEmbedUrl(url: string): string {
+    try {
+        const urlObj = new URL(url);
+        const videoId = urlObj.searchParams.get("v"); // Extract the `v` query parameter
+        return videoId ? `https://www.youtube.com/watch?v=${videoId}` : url;
+    } catch {
+        return url; // Return original URL if parsing fails
+    }
 }

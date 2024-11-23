@@ -15,6 +15,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   const redirectToDashboard = useCallback(
     (role: string) => {
       switch (role) {
@@ -42,6 +45,8 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoggingIn(true);
+    setError("");
     const result = await signIn("credentials", {
       email,
       password,
@@ -50,8 +55,10 @@ export default function LoginPage() {
 
     if (result?.error) {
       setError("Invalid email or password. Please try again.");
+      setLoggingIn(false);
     } else if (session?.user?.role) {
-      redirectToDashboard(session.user.role);
+      setSuccess(true); // Success state to show "Successfully logged in"
+      setTimeout(() => redirectToDashboard(session.user.role), 2000);
     }
   };
 
@@ -103,9 +110,16 @@ export default function LoginPage() {
               />
               <button
                 type="submit"
-                className="w-full px-4 py-2 font-semibold text-white bg-indigo-500 rounded-md hover:bg-indigo-600"
+                disabled={loggingIn || success} // Disable button during login or after success
+                className={`w-full px-4 py-2 font-semibold rounded-md ${
+                  success
+                    ? "bg-green-500 cursor-not-allowed text-white"
+                    : loggingIn
+                    ? "bg-gray-400 cursor-not-allowed text-white"
+                    : "bg-indigo-500 hover:bg-indigo-600 text-white"
+                }`}
               >
-                Login
+                {success ? "Successfully Logged In" : loggingIn ? "Logging in..." : "Login"}
               </button>
               {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
             </form>
