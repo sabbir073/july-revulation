@@ -52,6 +52,7 @@ export default function PersonProfile() {
         } else if (status === "authenticated" && session?.user.role === "ADMIN") {
             fetchPersonData();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status, router, session]);
 
     const fetchPersonData = async () => {

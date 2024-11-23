@@ -22,6 +22,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
 
+  const [language, setLanguage] = useState("EN"); // Add this state for language
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false); // For toggling the dropdown
+
   // Redirect if not logged in
   useEffect(() => {
     if (status === "loading") return;
@@ -29,6 +32,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       router.push("/login");
     }
   }, [status, router]);
+
+  const [loading, setLoading] = useState(false); // Existing loading state
+
+const handleLanguageChange = async (lang: string) => {
+  setLoading(true); // Start loading
+  setLanguage(lang);
+  localStorage.setItem("language", lang);
+  setIsLanguageDropdownOpen(false);
+
+  try {
+    //await translatePage(lang); // Translate the page
+  } finally {
+    setLoading(false); // End loading
+  }
+};
+  
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem("language");
+    if (storedLanguage) {
+      setLanguage(storedLanguage);
+      //translatePage(storedLanguage); // Apply translation on page load
+    }
+  }, []);
 
   // Define role-based menu items
   const menuItems = useMemo(() => {
@@ -47,6 +73,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         items.push({ title: "Photo Gallery", icon: FiPlusSquare, path: `${basePath}/photo-gallery` });
         items.push({ title: "Incident Location", icon: FiPlusSquare, path: `${basePath}/incident-location` });
         items.push({ title: "Documentary", icon: FiPlusSquare, path: `${basePath}/documentary` });
+        items.push({ title: "Users", icon: FiPlusSquare, path: `${basePath}/users` });
         
       }
 
@@ -57,6 +84,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   if (status === "loading") {
     return <LoadingSpinner />;;
+  }
+
+  if (loading) {
+    return <LoadingSpinner />;
   }
 
   if (status === "authenticated") {
@@ -130,6 +161,33 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             />
           </div>
 
+          {/* Language Dropdown */}
+          <div className="relative mr-4">
+            <button
+              onClick={() => setIsLanguageDropdownOpen((prev) => !prev)}
+              className="flex items-center space-x-1 focus:outline-none"
+            >
+              <span className="uppercase">{language}</span>
+              <FiChevronDown size={20} />
+            </button>
+            {isLanguageDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-32 bg-white text-black rounded-md shadow-lg z-20">
+                <button
+                  onClick={() => handleLanguageChange("EN")}
+                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-200"
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => handleLanguageChange("BN")}
+                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-200"
+                >
+                  BN
+                </button>
+              </div>
+            )}
+          </div>
+
           {/* User Profile Dropdown */}
           <div className="relative">
             <button
@@ -171,3 +229,5 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 }
 return null;
 }
+
+
