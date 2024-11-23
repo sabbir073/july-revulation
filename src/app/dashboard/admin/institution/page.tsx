@@ -21,6 +21,7 @@ export default function AdminManageInstitutions() {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [loading, setLoading] = useState(true);
   const [newInstitutionTitle, setNewInstitutionTitle] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const fetchInstitutions = async () => {
     try {
@@ -42,6 +43,7 @@ export default function AdminManageInstitutions() {
     }
 
     try {
+      setSubmitting(true);
       const payload = {
         title: newInstitutionTitle,
         created_by_id: session?.user.id,
@@ -65,6 +67,8 @@ export default function AdminManageInstitutions() {
     } catch (error) {
       Swal.fire("Error", "An error occurred while adding institution.", "error");
       console.error("Error adding institution:", error);
+    } finally {
+      setSubmitting(false); // Enable button and reset text
     }
   };
 
@@ -145,9 +149,12 @@ export default function AdminManageInstitutions() {
           />
           <button
             onClick={handleAddInstitution}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            disabled={submitting} // Disable the button while submitting
+            className={`bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ${
+              submitting ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            Add Institution
+            {submitting ? "Creating..." : "Add Institution"}
           </button>
         </div>
         <div>

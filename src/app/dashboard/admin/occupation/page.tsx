@@ -21,6 +21,7 @@ export default function AdminManageOccupations() {
   const [occupations, setOccupations] = useState<Occupation[]>([]);
   const [loading, setLoading] = useState(true);
   const [newOccupationTitle, setNewOccupationTitle] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const fetchOccupations = async () => {
     try {
@@ -42,6 +43,7 @@ export default function AdminManageOccupations() {
     }
   
     try {
+      setSubmitting(true);
       const payload = {
         title: newOccupationTitle,
         created_by_id: session?.user.id,
@@ -65,6 +67,8 @@ export default function AdminManageOccupations() {
     } catch (error) {
       Swal.fire("Error", "An error occurred while adding occupation.", "error");
       console.error("Error adding occupation:", error);
+    } finally {
+      setSubmitting(false); // Enable button and reset text
     }
   };
 
@@ -145,9 +149,12 @@ export default function AdminManageOccupations() {
           />
           <button
             onClick={handleAddOccupation}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            disabled={submitting} // Disable the button while submitting
+            className={`bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ${
+              submitting ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            Add Occupation
+            {submitting ? "Creating..." : "Add Occupation"}
           </button>
         </div>
         <div>

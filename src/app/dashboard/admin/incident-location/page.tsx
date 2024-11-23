@@ -21,6 +21,7 @@ export default function AdminManageIncidentLocations() {
   const [incidentLocations, setIncidentLocations] = useState<IncidentLocation[]>([]);
   const [loading, setLoading] = useState(true);
   const [newIncidentLocationTitle, setNewIncidentLocationTitle] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const fetchIncidentLocations = async () => {
     try {
@@ -42,6 +43,7 @@ export default function AdminManageIncidentLocations() {
     }
 
     try {
+      setSubmitting(true);
       const payload = {
         title: newIncidentLocationTitle,
         created_by_id: session?.user.id,
@@ -65,6 +67,8 @@ export default function AdminManageIncidentLocations() {
     } catch (error) {
       Swal.fire("Error", "An error occurred while adding incident location.", "error");
       console.error("Error adding incident location:", error);
+    } finally {
+      setSubmitting(false); // Enable button and reset text
     }
   };
 
@@ -143,11 +147,15 @@ export default function AdminManageIncidentLocations() {
             placeholder="Write incident location title"
             className="border border-gray-300 rounded px-4 py-2 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-green-300"
           />
+
           <button
             onClick={handleAddIncidentLocation}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            disabled={submitting} // Disable the button while submitting
+            className={`bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ${
+              submitting ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            Add Incident Location
+            {submitting ? "Creating..." : "Add Incident Location"}
           </button>
         </div>
         <div>
