@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
@@ -38,7 +38,7 @@ export default function AdminAddNewPeople() {
   const [occupations, setOccupations] = useState<Occupation[]>([]);
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [incidentLocations, setIncidentLocations] = useState<IncidentLocation[]>([]);
-
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -59,6 +59,10 @@ export default function AdminAddNewPeople() {
     status: "" as StatusType,
     documentary: "",
   });
+
+  // Refs for file inputs
+  const profilePictureRef = useRef<HTMLInputElement | null>(null);
+  const galleryRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -106,6 +110,7 @@ export default function AdminAddNewPeople() {
   };
 
   const handleSubmit = async () => {
+    setSubmitting(true);
     let fileUploadResponse = { success: true, profileName: null, galleryNames: [], message: "" };
   
     // Check if there are files to upload
@@ -113,6 +118,7 @@ export default function AdminAddNewPeople() {
       fileUploadResponse = await uploadFilesToS3(formData);
       if (!fileUploadResponse.success) {
         Swal.fire("Error", fileUploadResponse.message || "An error occurred during file upload.", "error");
+        setSubmitting(false);
         return;
       }
     }
@@ -157,6 +163,9 @@ export default function AdminAddNewPeople() {
           status: "" as StatusType,
           documentary: "",
         });
+        // Clear file inputs manually using refs
+        if (profilePictureRef.current) profilePictureRef.current.value = "";
+        if (galleryRef.current) galleryRef.current.value = "";
       } else {
         throw new Error("Failed to submit data");
       }
@@ -164,6 +173,8 @@ export default function AdminAddNewPeople() {
     } catch (error) {
       console.log(error);
       Swal.fire("Error", "An error occurred while submitting the data.", "error");
+    } finally {
+      setSubmitting(false); // Enable button and reset text
     }
   };
 
@@ -274,6 +285,7 @@ export default function AdminAddNewPeople() {
               <input
                 type="file"
                 name="profile_picture"
+                ref={profilePictureRef}
                 onChange={handleFileChange}
                 accept="image/*"
                 className="w-full border border-red-200 rounded-md px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -286,6 +298,7 @@ export default function AdminAddNewPeople() {
               <input
                 type="file"
                 name="gallery"
+                ref={galleryRef}
                 onChange={handleFileChange}
                 accept="image/*"
                 multiple
@@ -295,12 +308,17 @@ export default function AdminAddNewPeople() {
 
             {/* Submit Button */}
             <div className="col-span-1 md:col-span-2 flex justify-center mt-4">
-              <button
+            <button
                 type="button"
                 onClick={handleSubmit}
-                className="bg-red-500 text-white font-semibold rounded-md px-6 py-3 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-600"
+                disabled={submitting} // Disable button while submitting
+                className={`font-semibold rounded-md px-6 py-3 ${
+                  submitting
+                    ? "bg-gray-400 text-white cursor-not-allowed"
+                    : "bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-600"
+                }`}
               >
-                Submit
+                {submitting ? "Submitting..." : "Submit"}
               </button>
             </div>
           </form>
