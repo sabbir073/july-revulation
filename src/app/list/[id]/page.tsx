@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
-import DashboardLayout from "@/components/layouts/DashboardLayout";
+import HomeLayout from "@/components/layouts/HomeLayout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { format } from "date-fns";
 import Image from "next/image";
@@ -12,32 +11,22 @@ import "yet-another-react-lightbox/styles.css";
 import ReactPlayer from "react-player";
 
 interface Person {
-    id: number;
     name: string;
     age: number | null;
     occupation: { title: string } | null;
     institution: { title: string } | null;
-    address: string | null;
-    fathers_name: string | null;
-    mothers_name: string | null;
     date: string | null;
     date_of_death: string | null;
     story: string | null;
-    family_member_contact: string | null;
     profile_picture: string | null;
     gallery: string[];
     incident_location: { title: string } | null;
     incident_type: string;
     gender: string;
-    status: string;
     documentary: string | null;
-    submitted_by: { name: string };
-    created_at: string;
-    updated_at: string;
 }
 
 export default function PersonProfile() {
-    const { data: session, status } = useSession();
     const router = useRouter();
     const { id } = useParams();
     const [person, setPerson] = useState<Person | null>(null);
@@ -47,17 +36,12 @@ export default function PersonProfile() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
-        if (status === "unauthenticated") {
-            router.replace("/login");
-        } else if (status === "authenticated" && session?.user.role === "ADMIN") {
-            fetchPersonData();
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [status, router, session]);
+        fetchPersonData();
+    }, []);
 
     const fetchPersonData = async () => {
         try {
-            const response = await fetch(`/api/people/${id}`);
+            const response = await fetch(`/api/public/lists/${id}`);
             const data = await response.json();
             if (data.success) {
                 setPerson(data.person);
@@ -74,8 +58,7 @@ export default function PersonProfile() {
     const formatDate = (dateString: string) =>
         format(new Date(dateString), "dd MMM yyyy");
 
-    if (status === "loading" || loading) return <LoadingSpinner />;
-    if (status === "unauthenticated" || session?.user.role !== "ADMIN") return null;
+    if (loading) return <LoadingSpinner />;
 
     const imageUrl = person?.profile_picture
         ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${person.profile_picture}`
@@ -87,7 +70,12 @@ export default function PersonProfile() {
         })) || [];
 
     return (
-        <DashboardLayout>
+        <HomeLayout>
+            <div className="container mx-auto p-6">
+                <h1 className="text-center text-xl font-bold my-6 py-6 text-red-600 bg-[#e2e8f0]">
+                    DETAILS ABOUT {person?.name.toUpperCase()}
+                </h1>
+            </div>
             <div className="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Left Profile Card */}
                 <div className="lg:col-span-1 bg-white shadow-lg rounded-lg p-6 h-auto lg:sticky lg:top-6 lg:self-start">
@@ -143,40 +131,10 @@ export default function PersonProfile() {
                             <div className="flex-1 text-left">{formatDate(person.date_of_death)}</div>
                         </div>
                     )}
-                    {person?.fathers_name && (
-                        <div className="bg-[#fde68a] p-4 rounded shadow-lg flex">
-                            <div className="w-[200px] font-semibold text-left">Fathers Name:</div>
-                            <div className="flex-1 text-left">{person.fathers_name}</div>
-                        </div>
-                    )}
-                    {person?.mothers_name && (
-                        <div className="bg-[#bbf7d0] p-4 rounded shadow-lg flex">
-                            <div className="w-[200px] font-semibold text-left">Mothers Name:</div>
-                            <div className="flex-1 text-left">{person.mothers_name}</div>
-                        </div>
-                    )}
-                    {person?.address && (
-                        <div className="bg-[#d9f99d] p-4 rounded shadow-lg flex">
-                            <div className="w-[200px] font-semibold text-left">Address:</div>
-                            <div className="flex-1 text-left">{person.address}</div>
-                        </div>
-                    )}
-                    {person?.family_member_contact && (
-                        <div className="bg-[#e9d5ff] p-4 rounded shadow-lg flex">
-                            <div className="w-[200px] font-semibold text-left">Family Contact:</div>
-                            <div className="flex-1 text-left">{person.family_member_contact}</div>
-                        </div>
-                    )}
                     {person?.incident_location?.title && (
                         <div className="bg-[#cffafe] p-4 rounded shadow-lg flex">
                             <div className="w-[200px] font-semibold text-left">Incident Location:</div>
                             <div className="flex-1 text-left">{person.incident_location.title}</div>
-                        </div>
-                    )}
-                    {person?.status && (
-                        <div className="bg-[#ede9fe] p-4 rounded shadow-lg flex">
-                            <div className="w-[200px] font-semibold text-left">Status:</div>
-                            <div className="flex-1 text-left">{person.status}</div>
                         </div>
                     )}
                     {person?.story && (
@@ -241,25 +199,9 @@ export default function PersonProfile() {
                             </div>
                         </div>
                     )}
-
-                    {/* Cards for Created, Updated, Submitted By */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
-                            <h3 className="font-semibold">Created At</h3>
-                            <p>{formatDate(person?.created_at || "")}</p>
-                        </div>
-                        <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
-                            <h3 className="font-semibold">Updated At</h3>
-                            <p>{formatDate(person?.updated_at || "")}</p>
-                        </div>
-                        <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
-                            <h3 className="font-semibold">Submitted By</h3>
-                            <p>{person?.submitted_by.name}</p>
-                        </div>
-                    </div>
                 </div>
             </div>
-        </DashboardLayout>
+        </HomeLayout>
     );
 }
 

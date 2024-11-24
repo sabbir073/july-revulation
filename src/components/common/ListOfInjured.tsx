@@ -15,7 +15,6 @@ interface Person {
   date_of_death: string | null;
   gender: string | null;
   profile_picture: string | null;
-  incident_type: string | null;
 }
 
 const Filters: React.FC<{
@@ -25,8 +24,6 @@ const Filters: React.FC<{
   setOccupation: React.Dispatch<React.SetStateAction<string>>;
   gender: string;
   setGender: React.Dispatch<React.SetStateAction<string>>;
-  incidentType: string;
-  setIncidentType: React.Dispatch<React.SetStateAction<string>>;
   location: string;
   setLocation: React.Dispatch<React.SetStateAction<string>>;
   institution: string;
@@ -43,8 +40,6 @@ const Filters: React.FC<{
   setOccupation,
   gender,
   setGender,
-  incidentType,
-  setIncidentType,
   location,
   setLocation,
   institution,
@@ -94,19 +89,6 @@ const Filters: React.FC<{
         <option value="MALE">Male</option>
         <option value="FEMALE">Female</option>
         <option value="THIRD GENDER">Third Gender</option>
-      </select>
-    </div>
-
-    <div className="mb-4">
-      <label className="block mb-2 font-semibold text-sm">Type</label>
-      <select
-        value={incidentType}
-        onChange={(e) => setIncidentType(e.target.value)}
-        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-      >
-        <option value="">All</option>
-        <option value="MARTYR">Martyr</option>
-        <option value="INJURED">Injured</option>
       </select>
     </div>
 
@@ -168,15 +150,14 @@ const Card: React.FC<{ person: Person }> = ({ person }) => (
           <strong className="font-semibold">Occupation:</strong> {person.occupation?.title || "N/A"}
         </p>
         <p className="text-sm text-gray-600 mb-1">
-          <strong className="font-semibold">Type:</strong>{" "}
-          <span className="text-red-600">{person.incident_type === "DEATH" ? "MARTYR" : person.incident_type === "INJURED" ? "INJURED" : "N/A"}</span>
+          <strong className="font-semibold">Type:</strong>{"Martyr"}
         </p>
       </div>
     </div>
   </Link>
 );
 
-const ListWithFilters: React.FC = () => {
+const ListOfInjured: React.FC = () => {
   const [people, setPeople] = useState<Person[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -185,7 +166,7 @@ const ListWithFilters: React.FC = () => {
   const [age, setAge] = useState(100);
   const [occupation, setOccupation] = useState("");
   const [gender, setGender] = useState("");
-  const [incidentType, setIncidentType] = useState("");
+  const [incidentType, setIncidentType] = useState("INJURED");
   const [location, setLocation] = useState("");
   const [institution, setInstitution] = useState("");
   const [options, setOptions] = useState({
@@ -270,7 +251,7 @@ const ListWithFilters: React.FC = () => {
       <div className="sticky top-0 bg-white z-10 py-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
           <h1 className="text-3xl font-bold text-center md:text-left">
-            List of <span className="text-red-500">OUR HEROES</span> in the Movement
+            List of <span className="text-red-500">OUR INJURED</span> in the Movement
           </h1>
 
           <div className="relative w-full md:w-96">
@@ -294,8 +275,6 @@ const ListWithFilters: React.FC = () => {
             setOccupation={setOccupation}
             gender={gender}
             setGender={setGender}
-            incidentType={incidentType}
-            setIncidentType={setIncidentType}
             location={location}
             setLocation={setLocation}
             institution={institution}
@@ -344,4 +323,4 @@ const ListWithFilters: React.FC = () => {
   );
 };
 
-export default ListWithFilters;
+export default ListOfInjured;

@@ -89,21 +89,21 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Menu */}
-          <ul className="hidden xl:flex space-x-8 items-center text-white text-lg">
+          <ul className="hidden xl:flex space-x-8 items-center text-white text-sm">
             <li>
               <Link
                 href="/"
                 className="hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md transition-all"
               >
-                Home
+                HOME
               </Link>
             </li>
             <li>
               <Link
-                href="/Martyrs"
+                href="/martyrs"
                 className="hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md transition-all"
               >
-                Martyrs
+                MARTYRS
               </Link>
             </li>
             <li>
@@ -111,15 +111,23 @@ const Header: React.FC = () => {
                 href="/injured"
                 className="hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md transition-all"
               >
-                Injured
+                INJURED
               </Link>
             </li>
             <li>
               <Link
-                href="/archive"
+                href="/photos"
                 className="hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md transition-all"
               >
-                Archive
+                PHOTOS
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/documentaries"
+                className="hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md transition-all"
+              >
+                DOCUMENTARIES
               </Link>
             </li>
             <li>
@@ -127,7 +135,7 @@ const Header: React.FC = () => {
                 href="/forum"
                 className="hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md transition-all"
               >
-                Forum
+                FORUM
               </Link>
             </li>
             <li>
@@ -135,7 +143,7 @@ const Header: React.FC = () => {
                 href="/about"
                 className="hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md transition-all"
               >
-                About Us
+                ABOUT US
               </Link>
             </li>
             
@@ -220,50 +228,68 @@ const Header: React.FC = () => {
           </button>
         </div>
 
-        <ul className="flex flex-col items-start p-4 space-y-3 text-lg">
+        <ul className="flex flex-col items-start p-4 space-y-3 text-sm">
           <li>
             <Link
               href="/"
               onClick={toggleMobileNav}
               className="hover:text-blue-900 transition-all"
             >
-              Home
+              HOME
             </Link>
           </li>
           <li>
             <Link
-              href="/pages"
+              href="/martyrs"
               onClick={toggleMobileNav}
               className="hover:text-blue-900 transition-all"
             >
-              Pages
+              MARTYRS
             </Link>
           </li>
           <li>
             <Link
-              href="/projects"
+              href="/injured"
               onClick={toggleMobileNav}
               className="hover:text-blue-900 transition-all"
             >
-              Projects
+              INJURED
             </Link>
           </li>
           <li>
             <Link
-              href="/blog"
+              href="/photos"
               onClick={toggleMobileNav}
               className="hover:text-blue-900 transition-all"
             >
-              Blog
+              PHOTOS
             </Link>
           </li>
           <li>
             <Link
-              href="/contact"
+              href="/documentaries"
               onClick={toggleMobileNav}
               className="hover:text-blue-900 transition-all"
             >
-              Contact
+              DOCUMENTARIES
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/forum"
+              onClick={toggleMobileNav}
+              className="hover:text-blue-900 transition-all"
+            >
+              FORUM
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/about"
+              onClick={toggleMobileNav}
+              className="hover:text-blue-900 transition-all"
+            >
+              ABOUT US
             </Link>
           </li>
         </ul>
