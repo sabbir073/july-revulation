@@ -221,7 +221,7 @@ const ListOfMartyres: React.FC = () => {
         const data = await response.json();
   
         if (data.success) {
-          setPeople(reset ? data.people : [...people, ...data.people]);
+          setPeople((prev) => (reset ? data.people : [...prev, ...data.people]));
           setTotalCount(data.totalCount);
           if (reset) setSkip(take); // Reset skip for new data
         } else {
@@ -234,15 +234,18 @@ const ListOfMartyres: React.FC = () => {
         setLoadingMore(false);
       }
     },
-    [search, age, occupation, gender, incidentType, location, institution, skip, take, people]
+    [search, age, occupation, gender, incidentType, location, institution, skip, take]
   );
+
+useEffect(() => {
+    const delayFetch = setTimeout(() => {
+      fetchPeople(true); // Fetch new data with reset = true
+    }, 300);
   
-  useEffect(() => {
-    const delayFetch = setTimeout(() => fetchPeople(true), 300);
-    fetchOptions();
+    fetchOptions(); // Fetch filter options only once
   
     return () => clearTimeout(delayFetch);
-  }, [fetchPeople]);
+  }, [search, age, occupation, gender, incidentType, location, institution]);
 
   const handleLoadMore = () => {
     setSkip((prev) => prev + take);
