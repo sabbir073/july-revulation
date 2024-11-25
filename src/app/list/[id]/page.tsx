@@ -10,13 +10,6 @@ import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import ReactPlayer from "react-player";
 
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Details | July Revulation Allience',
-  description: 'Know the history of July revulation in Bangladesh.',
-}
-
 interface Person {
   name: string;
   age: number | null;
