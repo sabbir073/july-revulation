@@ -2,6 +2,13 @@
 import HomeLayout from '@/components/layouts/HomeLayout';
 import ListOfMartyres from '@/components/common/ListOfMartyres';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Martyrs | July Revulation Allience',
+  description: 'Know the history of July revulation in Bangladesh.',
+}
+
 export default function DashboardPage() {
   return (
     <HomeLayout>

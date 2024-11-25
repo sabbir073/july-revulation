@@ -5,6 +5,13 @@ import Counter from '@/components/common/Counter';
 import ListWithFilters from '@/components/common/ListWithFilters';
 import HeroSection from '@/components/common/HeroSection';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'July Revulation Allience',
+  description: 'Know the history of July revulation in Bangladesh.',
+}
+
 export default function DashboardPage() {
   return (
     <HomeLayout>

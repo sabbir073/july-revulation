@@ -8,6 +8,13 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import Image from "next/image";
 import Link from "next/link";
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Login | July Revulation Allience',
+  description: 'Know the history of July revulation in Bangladesh.',
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
