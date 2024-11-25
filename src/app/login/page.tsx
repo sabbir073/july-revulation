@@ -125,14 +125,14 @@ export default function LoginPage() {
             </form>
 
             {/* Register and Forget Password Links */}
-            <div className="flex justify-between mt-4 text-sm text-indigo-500">
+            {/* <div className="flex justify-between mt-4 text-sm text-indigo-500">
               <Link href="/register" className="hover:underline">
                 Register
               </Link>
               <Link href="/forget-password" className="hover:underline">
                 Forget Password?
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </LoginLayout>
