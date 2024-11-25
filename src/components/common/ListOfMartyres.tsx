@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -201,50 +201,46 @@ const ListOfMartyres: React.FC = () => {
     }
   };
 
-  const fetchPeople = useCallback(
-    async (reset: boolean = false) => {
-      setLoading(reset);
-      setLoadingMore(!reset);
-      try {
-        const queryParams = new URLSearchParams({
-          search,
-          age: age.toString(),
-          occupation,
-          gender,
-          incidentType,
-          location,
-          institution,
-          skip: reset ? "0" : skip.toString(),
-          take: take.toString(),
-        });
-        const response = await fetch(`/api/public/lists?${queryParams}`);
-        const data = await response.json();
-  
-        if (data.success) {
-          setPeople((prev) => (reset ? data.people : [...prev, ...data.people]));
-          setTotalCount(data.totalCount);
-          if (reset) setSkip(take); // Reset skip for new data
-        } else {
-          console.error("Error fetching people data:", data.error);
-        }
-      } catch (error) {
-        console.error("Error fetching people data:", error);
-      } finally {
-        setLoading(false);
-        setLoadingMore(false);
-      }
-    },
-    [search, age, occupation, gender, incidentType, location, institution, skip, take]
-  );
+  const fetchPeople = async (reset: boolean = false) => {
+    setLoading(reset);
+    setLoadingMore(!reset);
+    try {
+      const queryParams = new URLSearchParams({
+        search,
+        age: age.toString(),
+        occupation,
+        gender,
+        incidentType,
+        location,
+        institution,
+        skip: reset ? "0" : skip.toString(),
+        take: take.toString(),
+      });
+      const response = await fetch(`/api/public/lists?${queryParams}`);
+      const data = await response.json();
 
-useEffect(() => {
-    const delayFetch = setTimeout(() => {
-      fetchPeople(true); // Fetch new data with reset = true
-    }, 300);
-  
-    fetchOptions(); // Fetch filter options only once
-  
+      if (data.success) {
+        console.log(data);
+        setPeople(reset ? data.people : [...people, ...data.people]);
+        setTotalCount(data.totalCount);
+        if (reset) setSkip(take); // Reset skip for new data
+      } else {
+        console.error("Error fetching people data:", data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching people data:", error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  useEffect(() => {
+    const delayFetch = setTimeout(() => fetchPeople(true), 300);
+    fetchOptions();
+    
     return () => clearTimeout(delayFetch);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, age, occupation, gender, incidentType, location, institution]);
 
   const handleLoadMore = () => {
