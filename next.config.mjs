@@ -15,13 +15,20 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)", // Apply to all routes
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "s-maxage=3600, stale-while-revalidate=59",
-          },
-        ],
+        source: "/(.*)",
+        headers: process.env.NODE_ENV === "development"
+          ? [
+              {
+                key: "Cache-Control",
+                value: "no-store",
+              },
+            ]
+          : [
+              {
+                key: "Cache-Control",
+                value: "s-maxage=3600, stale-while-revalidate=59",
+              },
+            ],
       },
     ];
   },

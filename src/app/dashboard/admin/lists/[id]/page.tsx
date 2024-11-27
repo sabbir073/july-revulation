@@ -32,6 +32,7 @@ interface Person {
     status: string;
     documentary: string | null;
     submitted_by: { name: string };
+    updated_by: { name: string } | null;
     created_at: string;
     updated_at: string;
 }
@@ -72,7 +73,7 @@ export default function PersonProfile() {
     };
 
     const formatDate = (dateString: string) =>
-        format(new Date(dateString), "dd MMM yyyy");
+        format(new Date(dateString), "dd MMM yyyy  hh:mm a");
 
     if (status === "loading" || loading) return <LoadingSpinner />;
     if (status === "unauthenticated" || session?.user.role !== "ADMIN") return null;
@@ -243,18 +244,22 @@ export default function PersonProfile() {
                     )}
 
                     {/* Cards for Created, Updated, Submitted By */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-1">
                         <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
-                            <h3 className="font-semibold">Created At</h3>
+                            <h3 className="font-semibold">Submitted At</h3>
                             <p>{formatDate(person?.created_at || "")}</p>
                         </div>
                         <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
-                            <h3 className="font-semibold">Updated At</h3>
+                            <h3 className="font-semibold">Last Update</h3>
                             <p>{formatDate(person?.updated_at || "")}</p>
                         </div>
                         <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
                             <h3 className="font-semibold">Submitted By</h3>
                             <p>{person?.submitted_by.name}</p>
+                        </div>
+                        <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
+                            <h3 className="font-semibold">Updated By</h3>
+                            <p>{person?.updated_by?.name || "N/A"}</p>
                         </div>
                     </div>
                 </div>

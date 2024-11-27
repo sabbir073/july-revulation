@@ -19,11 +19,14 @@ export default withAuth(
     if (pathname.startsWith("/api")) {
       const response = NextResponse.next();
 
-      // Add caching headers for API responses
-      response.headers.set(
-        "Cache-Control",
-        "s-maxage=3600, stale-while-revalidate=59"
-      );
+      if (process.env.NODE_ENV === "development") {
+        response.headers.set("Cache-Control", "no-store");
+      } else {
+        response.headers.set(
+          "Cache-Control",
+          "s-maxage=3600, stale-while-revalidate=59"
+        );
+      }
       return response;
     }
 

@@ -130,6 +130,10 @@ export default function AdminSeeLists() {
     router.push(`/dashboard/admin/lists/${id}`); // Redirect to the profile view page
   };
 
+  const handleEdit = (id: number) => {
+    router.push(`/dashboard/admin/update/${id}`);
+  };
+
   if (status === "loading" || loading) return <LoadingSpinner />;
   if (status === "unauthenticated" || session?.user.role !== "ADMIN") return null;
 
@@ -159,7 +163,7 @@ export default function AdminSeeLists() {
       cell: (row: Person) => (
         <div className="flex space-x-3 text-lg">
           <FontAwesomeIcon icon={faEye} className="text-green-600 cursor-pointer" title="View" onClick={() => handleView(row.id)} />
-          <FontAwesomeIcon icon={faEdit} className="text-blue-600 cursor-pointer" title="Edit" />
+          <FontAwesomeIcon icon={faEdit} className="text-blue-600 cursor-pointer" title="Edit" onClick={() => handleEdit(row.id)}/>
           <FontAwesomeIcon icon={faTrash} className="text-red-600 cursor-pointer" title="Delete" onClick={() => handleDelete(row.id)} />
         </div>
       ),

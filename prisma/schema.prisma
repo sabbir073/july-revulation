@@ -22,6 +22,7 @@ model User {
   sessions              Session[]
   accounts              Account[]
   people_submissions    People[]        @relation("UserSubmissions") // Link to People created by user
+  updated_people        People[]        @relation("UserUpdates") // Link to People updated by user
   created_occupations   Occupation[]
   created_institutions  Institution[]
   created_locations     IncidentLocation[]
@@ -58,6 +59,8 @@ model People {
   updated_at            DateTime           @updatedAt
   submitted_by          User               @relation("UserSubmissions", fields: [submitted_by_id], references: [id])
   submitted_by_id       Int
+  updated_by            User?              @relation("UserUpdates", fields: [updated_by_id], references: [id])
+  updated_by_id         Int?               // Optional field, default is NULL
 }
 
 // Supporting tables for admin-controlled data
