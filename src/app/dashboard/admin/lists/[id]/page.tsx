@@ -244,7 +244,7 @@ export default function PersonProfile() {
                     )}
 
                     {/* Cards for Created, Updated, Submitted By */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-1">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="bg-blue-100 p-4 rounded shadow-lg text-base">
                             <h3 className="font-semibold">Submitted At</h3>
                             <p>{formatDate(person?.created_at || "")}</p>
