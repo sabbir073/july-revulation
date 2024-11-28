@@ -15,21 +15,24 @@ export default withAuth(
   async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
-    // Check if the request is for an API route
-    if (pathname.startsWith("/api")) {
+    // Special handling for /api/public
+    if (pathname === "/api/public") {
       const response = NextResponse.next();
-
-      // Disable cache specifically for login
-      if (pathname === "/api/auth/callback/credentials") {
-        response.headers.set("Cache-Control", "no-store"); // Disable caching for login
-      } else if (process.env.NODE_ENV === "development") {
-        response.headers.set("Cache-Control", "no-store"); // Disable cache in dev
+      if (process.env.NODE_ENV === "development") {
+        response.headers.set("Cache-Control", "no-store"); // Disable caching in development
       } else {
         response.headers.set(
           "Cache-Control",
-          "s-maxage=3600, stale-while-revalidate=59"
-        ); // Enable cache for other API routes
+          "s-maxage=3600, stale-while-revalidate=59" // Cache /api/public in production
+        );
       }
+      return response;
+    }
+
+    // Disable cache for all other API routes
+    if (pathname.startsWith("/api")) {
+      const response = NextResponse.next();
+      response.headers.set("Cache-Control", "no-store"); // No cache for other APIs
       return response;
     }
 
