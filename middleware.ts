@@ -19,13 +19,16 @@ export default withAuth(
     if (pathname.startsWith("/api")) {
       const response = NextResponse.next();
 
-      if (process.env.NODE_ENV === "development") {
-        response.headers.set("Cache-Control", "no-store");
+      // Disable cache specifically for login
+      if (pathname === "/api/auth/callback/credentials") {
+        response.headers.set("Cache-Control", "no-store"); // Disable caching for login
+      } else if (process.env.NODE_ENV === "development") {
+        response.headers.set("Cache-Control", "no-store"); // Disable cache in dev
       } else {
         response.headers.set(
           "Cache-Control",
           "s-maxage=3600, stale-while-revalidate=59"
-        );
+        ); // Enable cache for other API routes
       }
       return response;
     }

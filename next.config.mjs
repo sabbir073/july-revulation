@@ -15,7 +15,16 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: "/api/auth/callback/credentials", // Disable cache for login route
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store",
+          },
+        ],
+      },
+      {
+        source: "/(.*)", // Apply to all other routes
         headers: process.env.NODE_ENV === "development"
           ? [
               {
