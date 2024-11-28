@@ -54,7 +54,7 @@ const Header: React.FC = () => {
           <div className="flex flex-col md:flex-row md:justify-between">
             <div className="flex items-center mb-2 md:mb-0">
               <FaMapMarkerAlt className="mr-2 text-lg" />
-              <p>Uttara, Dhaka 1230.</p>
+              <p>House-05, Sector-11, Uttara, Dhaka</p>
             </div>
             <div className="flex items-center mb-2 md:mb-0">
               <FaPhoneAlt className="mr-2 text-lg" />
@@ -72,7 +72,7 @@ const Header: React.FC = () => {
 
       {/* Navbar */}
       <nav
-        className={`bg-[#2e7d32] sticky top-0 z-50 py-4 transition-all ${
+        className={`bg-[#f0f9ff] sticky top-0 z-50 py-4 transition-all ${
           isSticky ? "py-2 shadow-md" : ""
         }`}
       >
@@ -89,7 +89,7 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Menu */}
-          <ul className="hidden xl:flex space-x-8 items-center text-white text-sm">
+          <ul className="hidden xl:flex space-x-8 items-center text-[#000000] text-sm">
             <li>
               <Link
                 href="/"
@@ -154,7 +154,7 @@ const Header: React.FC = () => {
             {/* Language Dropdown */}
             <div className="relative" ref={languageRef}>
               <button
-                className="uppercase text-white flex items-center space-x-1 focus:outline-none"
+                className="uppercase text-dark flex items-center space-x-1 focus:outline-none"
                 onClick={toggleLanguageDropdown}
               >
                 <span>EN</span>
@@ -198,7 +198,7 @@ const Header: React.FC = () => {
             </Link>
 
             <button
-              className="xl:hidden text-2xl text-white"
+              className="xl:hidden text-2xl text-dark"
               onClick={toggleMobileNav}
             >
               <FaBars />
@@ -297,7 +297,7 @@ const Header: React.FC = () => {
         <div className="mt-auto p-4 space-y-4">
           <div className="flex items-center space-x-2 text-sm">
             <FaMapMarkerAlt className="text-lg" />
-            <p>Moonshine St. 14/05 Light City</p>
+            <p>House-05, Sector-11, Uttara, Dhaka</p>
           </div>
           <div className="flex items-center space-x-2 text-sm">
             <FaPhoneAlt className="text-lg" />
@@ -305,7 +305,7 @@ const Header: React.FC = () => {
           </div>
           <div className="flex items-center space-x-2 text-sm">
             <FaEnvelope className="text-lg" />
-            <a href="mailto:sandbox@email.com">sandbox@email.com</a>
+            <a href="mailto:info@jrabd.org">info@jrabd.org</a>
           </div>
 
           <div className="flex justify-center space-x-4 mt-4">

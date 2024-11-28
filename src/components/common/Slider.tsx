@@ -5,22 +5,22 @@ import { useEffect, useState } from "react";
 
 const slides = [
   {
-    src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/1.webp`,
+    src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/slider1.jpg`,
     alt: "Slide 1",
-    title: "Heroes Never Die!",
-    subtitle: "Remembering their sacrifices for our future.",
+    title: "Long Live The Revulation!",
+    subtitle: "Remembering All The Heroes of July",
   },
   {
-    src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/2.jpg`,
+    src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/1.webp`,
     alt: "Slide 2",
-    title: "Legacy of Bravery",
-    subtitle: "Honoring those who stood for freedom.",
+    title: "Long Live The Resistance!",
+    subtitle: "Honoring the sacrifice of all the heroes of July",
   },
   {
-    src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/3.jpg`,
+    src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/slider2.jpg`,
     alt: "Slide 3",
-    title: "In Their Memory",
-    subtitle: "Their courage inspires generations.",
+    title: "Heroes Never Die!",
+    subtitle: "Remembering their legacy, Inspiring our future.",
   },
 ];
 
@@ -31,13 +31,14 @@ const Slider: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="relative w-full h-[500px]">
+    <div className="relative w-full h-[300px] md:h-[550px]">
+
       {/* Image Slider */}
       {slides.map((slide, index) => (
         <div
