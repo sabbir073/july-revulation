@@ -72,6 +72,10 @@ export default function PersonProfile() {
         }
     };
 
+    
+    const formatDateTop = (dateString: string) =>
+        format(new Date(dateString), "dd MMM yyyy");
+
     const formatDate = (dateString: string) =>
         format(new Date(dateString), "dd MMM yyyy  hh:mm a");
 
@@ -135,13 +139,13 @@ export default function PersonProfile() {
                     {person?.date && (
                         <div className="bg-[#fecaca] p-4 rounded shadow-lg flex">
                             <div className="w-[200px] font-semibold text-left">Date of Incident:</div>
-                            <div className="flex-1 text-left">{formatDate(person.date)}</div>
+                            <div className="flex-1 text-left">{formatDateTop(person.date)}</div>
                         </div>
                     )}
                     {person?.date_of_death && (
                         <div className="bg-[#d1d5db] p-4 rounded shadow-lg flex">
                             <div className="w-[200px] font-semibold text-left">Date of Death:</div>
-                            <div className="flex-1 text-left">{formatDate(person.date_of_death)}</div>
+                            <div className="flex-1 text-left">{formatDateTop(person.date_of_death)}</div>
                         </div>
                     )}
                     {person?.fathers_name && (
