@@ -199,9 +199,9 @@ const ListWithFilters: React.FC = () => {
   const fetchOptions = async () => {
     try {
       const [occupationsRes, locationsRes, institutionsRes] = await Promise.all([
-        fetch("/api/occupations"),
-        fetch("/api/incident-locations"),
-        fetch("/api/institutions"),
+        fetch("/api/public/occupations"),
+        fetch("/api/public/incident-locations"),
+        fetch("/api/public/institutions"),
       ]);
 
       const [occupationsData, locationsData, institutionsData] = await Promise.all([

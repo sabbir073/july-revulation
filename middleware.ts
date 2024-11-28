@@ -10,29 +10,18 @@ const rolePaths: Record<string, string> = {
   USER: "/dashboard/user",
 };
 
-// Extend withAuth to include role-based redirection
 export default withAuth(
   async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
-    // Special handling for /api/public
-    if (pathname === "/api/public") {
+    // Handle caching for /api/public/*
+    if (pathname.startsWith("/api/public")) {
       const response = NextResponse.next();
-      if (process.env.NODE_ENV === "development") {
-        response.headers.set("Cache-Control", "no-store"); // Disable caching in development
-      } else {
-        response.headers.set(
-          "Cache-Control",
-          "s-maxage=3600, stale-while-revalidate=59" // Cache /api/public in production
-        );
-      }
-      return response;
-    }
-
-    // Disable cache for all other API routes
-    if (pathname.startsWith("/api")) {
-      const response = NextResponse.next();
-      response.headers.set("Cache-Control", "no-store"); // No cache for other APIs
+      const cacheControlValue =
+        process.env.NODE_ENV === "development"
+          ? "no-store"
+          : "s-maxage=3600, stale-while-revalidate=59";
+      response.headers.set("Cache-Control", cacheControlValue);
       return response;
     }
 
@@ -60,6 +49,7 @@ export default withAuth(
   }
 );
 
+// Match only the necessary routes
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/:path*"], // Apply middleware to all dashboard and API routes
+  matcher: ["/dashboard/:path*", "/api/public/:path*"], // Apply middleware to /dashboard and /api/public/*
 };

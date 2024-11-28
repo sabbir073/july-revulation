@@ -14,9 +14,9 @@ const nextConfig = {
   },
   async headers() {
     return [
-      // Cache only /api/public
+      // Cache only /api/public/*
       {
-        source: "/api/public",
+        source: "/api/public/:path*",
         headers: process.env.NODE_ENV === "development"
           ? [
               {
@@ -30,16 +30,6 @@ const nextConfig = {
                 value: "s-maxage=3600, stale-while-revalidate=59", // Cache for production
               },
             ],
-      },
-      // Disable cache for all other API routes
-      {
-        source: "/api/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "no-store", // No cache for other APIs
-          },
-        ],
       },
     ];
   },
