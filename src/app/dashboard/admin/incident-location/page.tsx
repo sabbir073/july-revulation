@@ -72,6 +72,50 @@ export default function AdminManageIncidentLocations() {
     }
   };
 
+
+  const handleEditIncidentLocation = async (id: number, currentTitle: string) => {
+    const { value: newTitle } = await Swal.fire({
+      title: "Edit Incident Location",
+      input: "text",
+      inputValue: currentTitle,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      cancelButtonText: "Cancel",
+      inputValidator: (value) => {
+        if (!value.trim()) {
+          return "The title cannot be empty.";
+        }
+      },
+    });
+  
+    if (newTitle) {
+      try {
+        const response = await fetch(`/api/incident-locations`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, title: newTitle }),
+        });
+  
+        const data = await response.json();
+  
+        if (data.success) {
+          setIncidentLocations((prev) =>
+            prev.map((location) =>
+              location.id === id ? { ...location, title: newTitle } : location
+            )
+          );
+          Swal.fire("Success", "Incident Location updated successfully.", "success");
+        } else {
+          Swal.fire("Error", data.message || "Failed to update incident location.", "error");
+        }
+      } catch (error) {
+        Swal.fire("Error", "An error occurred while updating the incident location.", "error");
+        console.error("Error updating incident location:", error);
+      }
+    }
+  };
+  
+
   const handleDeleteIncidentLocation = async (id: number) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -119,7 +163,12 @@ export default function AdminManageIncidentLocations() {
       name: "Actions",
       cell: (row: IncidentLocation) => (
         <div className="flex space-x-3 text-lg">
-          <FontAwesomeIcon icon={faEdit} className="text-blue-600 cursor-pointer" title="Edit" />
+          <FontAwesomeIcon
+            icon={faEdit}
+            className="text-blue-600 cursor-pointer"
+            title="Edit"
+            onClick={() => handleEditIncidentLocation(row.id, row.title)}
+          />
           <FontAwesomeIcon
             icon={faTrash}
             className="text-red-600 cursor-pointer"

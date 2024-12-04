@@ -72,6 +72,49 @@ export default function AdminManageInstitutions() {
     }
   };
 
+  const handleEditInstitution = async (id: number, currentTitle: string) => {
+    const { value: newTitle } = await Swal.fire({
+      title: "Edit Institution",
+      input: "text",
+      inputValue: currentTitle,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      cancelButtonText: "Cancel",
+      inputValidator: (value) => {
+        if (!value.trim()) {
+          return "The title cannot be empty.";
+        }
+      },
+    });
+  
+    if (newTitle) {
+      try {
+        const response = await fetch(`/api/institutions`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, title: newTitle }),
+        });
+  
+        const data = await response.json();
+  
+        if (data.success) {
+          setInstitutions((prev) =>
+            prev.map((institution) =>
+              institution.id === id ? { ...institution, title: newTitle } : institution
+            )
+          );
+          Swal.fire("Success", "Institution updated successfully.", "success");
+        } else {
+          Swal.fire("Error", data.message || "Failed to update institution.", "error");
+        }
+      } catch (error) {
+        Swal.fire("Error", "An error occurred while updating the institution.", "error");
+        console.error("Error updating institution:", error);
+      }
+    }
+  };
+  
+
   const handleDeleteInstitution = async (id: number) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -119,7 +162,12 @@ export default function AdminManageInstitutions() {
       name: "Actions",
       cell: (row: Institution) => (
         <div className="flex space-x-3 text-lg">
-          <FontAwesomeIcon icon={faEdit} className="text-blue-600 cursor-pointer" title="Edit" />
+          <FontAwesomeIcon
+            icon={faEdit}
+            className="text-blue-600 cursor-pointer"
+            title="Edit"
+            onClick={() => handleEditInstitution(row.id, row.title)}
+          />
           <FontAwesomeIcon
             icon={faTrash}
             className="text-red-600 cursor-pointer"

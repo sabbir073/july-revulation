@@ -74,3 +74,34 @@ export async function DELETE(request: NextRequest) {
     );
   }
 }
+
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { id, title } = body;
+
+    if (!id || !title) {
+      return NextResponse.json(
+        { success: false, message: "Both ID and title are required." },
+        { status: 400 }
+      );
+    }
+
+    const updatedIncidentLocation = await prisma.incidentLocation.update({
+      where: { id: Number(id) },
+      data: { title },
+    });
+
+    return NextResponse.json(
+      { success: true, incidentLocation: updatedIncidentLocation },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error updating incident location:", error);
+    return NextResponse.json(
+      { success: false, message: "An error occurred while updating the incident location." },
+      { status: 500 }
+    );
+  }
+}
+

@@ -72,6 +72,49 @@ export default function AdminManageOccupations() {
     }
   };
 
+  const handleEditOccupation = async (id: number, currentTitle: string) => {
+    const { value: newTitle } = await Swal.fire({
+      title: "Edit Occupation",
+      input: "text",
+      inputValue: currentTitle,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      cancelButtonText: "Cancel",
+      inputValidator: (value) => {
+        if (!value.trim()) {
+          return "The title cannot be empty.";
+        }
+      },
+    });
+  
+    if (newTitle) {
+      try {
+        const response = await fetch(`/api/occupations`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, title: newTitle }),
+        });
+  
+        const data = await response.json();
+  
+        if (data.success) {
+          setOccupations((prev) =>
+            prev.map((occupation) =>
+              occupation.id === id ? { ...occupation, title: newTitle } : occupation
+            )
+          );
+          Swal.fire("Success", "Occupation updated successfully.", "success");
+        } else {
+          Swal.fire("Error", data.message || "Failed to update occupation.", "error");
+        }
+      } catch (error) {
+        Swal.fire("Error", "An error occurred while updating the occupation.", "error");
+        console.error("Error updating occupation:", error);
+      }
+    }
+  };
+  
+
   const handleDeleteOccupation = async (id: number) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -119,7 +162,13 @@ export default function AdminManageOccupations() {
       name: "Actions",
       cell: (row: Occupation) => (
         <div className="flex space-x-3 text-lg">
-          <FontAwesomeIcon icon={faEdit} className="text-blue-600 cursor-pointer" title="Edit" />
+          <FontAwesomeIcon
+            icon={faEdit}
+            className="text-blue-600 cursor-pointer"
+            title="Edit"
+            onClick={() => handleEditOccupation(row.id, row.title)}
+          />
+
           <FontAwesomeIcon
             icon={faTrash}
             className="text-red-600 cursor-pointer"
