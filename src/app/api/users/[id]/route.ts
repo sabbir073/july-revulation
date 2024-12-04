@@ -33,6 +33,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         email: true,
         role: true,
         display_name: true,
+        mobile_number: true,
         created_at: true,
         updated_at: true,
       },
@@ -61,6 +62,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       email: data.email,
       role: data.role,
       display_name: data.display_name,
+      mobile_number: data.mobile_number,
       updated_at: new Date(), // Automatically update `updated_at`
     };
 

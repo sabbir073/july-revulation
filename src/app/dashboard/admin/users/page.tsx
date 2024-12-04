@@ -15,6 +15,7 @@ interface User {
   name: string;
   email: string;
   role: string;
+  mobile_number: string | null;
   display_name: string | null;
   created_at: string;
   updated_at: string;
@@ -126,6 +127,7 @@ export default function AdminManageUsers() {
     { name: "ID", selector: (row: User) => row.id, sortable: true, grow: 0 },
     { name: "Name", selector: (row: User) => row.name, sortable: true },
     { name: "Email", selector: (row: User) => row.email, sortable: true },
+    { name: "Mobile No.", selector: (row: User) => row.mobile_number || "N/A", sortable: false },
     { name: "Role", selector: (row: User) => row.role, sortable: true },
     { name: "Display Name", selector: (row: User) => row.display_name || "N/A", sortable: true },
     {

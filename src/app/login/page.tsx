@@ -7,6 +7,8 @@ import LoginLayout from "@/components/layouts/LoginLayout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Image from "next/image";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,6 +19,8 @@ export default function LoginPage() {
 
   const [loggingIn, setLoggingIn] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const redirectToDashboard = useCallback(
     (role: string) => {
@@ -101,13 +105,20 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
               />
+              <div className="relative">
               <input
-                type="password"
+                type={passwordVisible ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
               />
+              <FontAwesomeIcon
+                icon={passwordVisible ? faEyeSlash : faEye}
+                className="absolute right-3 top-3 cursor-pointer text-gray-500"
+                onClick={() => setPasswordVisible((prev) => !prev)}
+              />
+            </div>
               <button
                 type="submit"
                 disabled={loggingIn || success} // Disable button during login or after success
@@ -125,14 +136,14 @@ export default function LoginPage() {
             </form>
 
             {/* Register and Forget Password Links */}
-            {/* <div className="flex justify-between mt-4 text-sm text-indigo-500">
+            <div className="flex justify-between mt-4 text-sm text-indigo-500">
               <Link href="/register" className="hover:underline">
                 Register
               </Link>
-              <Link href="/forget-password" className="hover:underline">
+              {/* <Link href="/forget-password" className="hover:underline">
                 Forget Password?
-              </Link>
-            </div> */}
+              </Link> */}
+            </div>
           </div>
         </div>
       </LoginLayout>

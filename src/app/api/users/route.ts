@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
         password: hashedPassword,
         role: data.role,
         display_name: data.display_name || null,
+        mobile_number: data.mobile_number || null,
       },
     });
 
@@ -60,6 +61,7 @@ export async function GET(req: NextRequest) {
                 ? { equals: searchQuery.toUpperCase() as Role }
                 : undefined },
             { display_name: { contains: searchQuery, mode: Prisma.QueryMode.insensitive } },
+            { mobile_number: { contains: searchQuery, mode: Prisma.QueryMode.insensitive } },
           ],
         }
       : {};

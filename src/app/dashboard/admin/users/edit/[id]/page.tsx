@@ -20,7 +20,8 @@ interface FormDataType {
   email: string;
   password?: string; // Mark as optional since it may not always be present
   role: RoleType;
-  display_name: string;
+  display_name?: string;
+  mobile_number?: string;
 }
   
 
@@ -38,6 +39,7 @@ export default function AdminEditUser() {
     email: "",
     password: "",
     role: "" as RoleType,
+    mobile_number: "",
     display_name: "",
   });
 
@@ -60,6 +62,7 @@ export default function AdminEditUser() {
             password: "", // Password field left empty
             role: data.user.role || "",
             display_name: data.user.display_name || "",
+            mobile_number: data.user.mobile_number || "",
           });
         } else {
           Swal.fire("Error", "User not found.", "error");
@@ -145,6 +148,7 @@ export default function AdminEditUser() {
                 options: ROLE_TYPES.map((role) => ({ value: role, label: role })),
                 required: true,
               },
+              { label: "Mobile No.", name: "mobile_number", type: "text", placeholder: "Enter Mobile Number" },
               { label: "Display Name", name: "display_name", type: "text", placeholder: "Enter display name" },
             ].map((field, index) => (
               <div key={index}>

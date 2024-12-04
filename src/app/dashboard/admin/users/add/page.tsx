@@ -25,6 +25,7 @@ export default function AdminAddNewUser() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    mobile_number: "",
     password: "",
     role: "" as RoleType,
     display_name: "",
@@ -67,6 +68,7 @@ export default function AdminAddNewUser() {
         setFormData({
           name: "",
           email: "",
+          mobile_number: "",
           password: "",
           role: "" as RoleType,
           display_name: "",
@@ -107,6 +109,7 @@ export default function AdminAddNewUser() {
                 options: ROLE_TYPES.map((role) => ({ value: role, label: role })),
                 required: true,
               },
+              { label: "Mobile Number", name: "mobile_number", type: "text", placeholder: "Enter Mobile Number" },
               { label: "Display Name", name: "display_name", type: "text", placeholder: "Enter display name" },
             ].map((field, index) => (
               <div key={index}>

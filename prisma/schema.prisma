@@ -17,6 +17,7 @@ model User {
   password              String          // Store bcrypt hashed password
   role                  Role            @default(USER) // Role-based access
   display_name          String?
+  mobile_number         String?         // Add the mobile number as an optional field
   created_at            DateTime        @default(now())
   updated_at            DateTime        @updatedAt
   sessions              Session[]
@@ -30,6 +31,7 @@ model User {
   created_galleries     PhotoGallery[]
   created_documentaries Documentary[]
 }
+
 
 // People table for information about individuals in the system
 model People {
