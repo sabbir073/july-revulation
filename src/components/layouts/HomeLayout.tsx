@@ -5,7 +5,7 @@ import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   // Example: Fetch data for metadata
-  const siteName = "July Revolution Alliance";
+  const siteName = "July Revolutionary Alliance";
   const description = "Know the History of the July Revolution in Bangladesh";
   const favicon = "/favicon.png";
 

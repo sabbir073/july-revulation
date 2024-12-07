@@ -74,6 +74,7 @@ const handleLanguageChange = async (lang: string) => {
         items.push({ title: "Incident Location", icon: FiPlusSquare, path: `${basePath}/incident-location` });
         items.push({ title: "Documentary", icon: FiPlusSquare, path: `${basePath}/documentary` });
         items.push({ title: "Users", icon: FiPlusSquare, path: `${basePath}/users` });
+        items.push({ title: "Visitor Details", icon: FiPlusSquare, path: `${basePath}/visitor` });
         
       }
 
@@ -95,45 +96,57 @@ const handleLanguageChange = async (lang: string) => {
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 bg-gray-800 text-white w-64 z-50 transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 transition-transform duration-300 ease-in-out`}
+  className={`fixed inset-y-0 left-0 bg-gray-800 text-white w-64 z-50 transform ${
+    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+  } md:translate-x-0 transition-transform duration-300 ease-in-out`}
+  style={{
+    overflowY: "auto",
+    maxHeight: "100vh",
+    scrollbarWidth: "none", // For Firefox
+    msOverflowStyle: "none", // For IE and Edge
+  }}
+>
+  <style jsx>{`
+    aside::-webkit-scrollbar {
+      display: none; // For Chrome, Safari, and Edge
+    }
+  `}</style>
+
+  <div className="p-6 pt-4 flex justify-between items-center">
+    <Image
+      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.png`}
+      alt="Logo"
+      width={150}
+      height={50}
+      className="h-12 w-auto object-cover cursor-pointer"
+    />
+    <button
+      onClick={toggleSidebar}
+      className="md:hidden text-white focus:outline-none"
+    >
+      <FiX size={24} />
+    </button>
+  </div>
+
+  {/* Role-based Dashboard Label */}
+  <div className="px-6 pb-4 text-gray-300 text-lg font-semibold">
+    Hi, {session?.user.display_name}
+  </div>
+
+  {/* Sidebar Menu */}
+  <nav className="space-y-2 px-4">
+    {menuItems.map((item) => (
+      <Link
+        key={item.title}
+        href={item.path}
+        className="flex items-center px-2 py-2 rounded-md hover:bg-gray-700"
       >
-        <div className="p-6 pt-4 flex justify-between items-center">
-          <Image
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.png`}
-            alt="Logo"
-            width={150}
-            height={50}
-            className="h-12 w-auto object-cover cursor-pointer"
-          />
-          <button
-            onClick={toggleSidebar}
-            className="md:hidden text-white focus:outline-none"
-          >
-            <FiX size={24} />
-          </button>
-        </div>
-
-        {/* Role-based Dashboard Label */}
-        <div className="px-6 pb-4 text-gray-300 text-lg font-semibold">
-          Hi, {session?.user.display_name}
-        </div>
-
-        {/* Sidebar Menu */}
-        <nav className="space-y-2 px-4">
-          {menuItems.map((item) => (
-            <Link
-              key={item.title}
-              href={item.path}
-              className="flex items-center px-2 py-2 rounded-md hover:bg-gray-700"
-            >
-              <item.icon className="mr-3" />
-              {item.title}
-            </Link>
-          ))}
-        </nav>
-      </aside>
+        <item.icon className="mr-3" />
+        {item.title}
+      </Link>
+    ))}
+  </nav>
+</aside>
 
       {/* Main Content */}
       <div className="flex-1 ml-0 md:ml-64 flex flex-col min-h-screen">

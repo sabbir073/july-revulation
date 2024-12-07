@@ -146,6 +146,16 @@ model Account {
   expires_at         Int?
 }
 
+model Visitor {
+  id          Int       @id @default(autoincrement())
+  ip_address  String    // Store the visitor's IP address
+  country     String?   // Geolocation: country
+  region      String?   // Geolocation: region/state
+  city        String?   // Geolocation: city
+  visit_count Int       @default(1) // Track the number of visits
+  visited_at  DateTime  @default(now()) // Timestamp of the last visit
+}
+
 // Enums
 enum Role {
   ADMIN

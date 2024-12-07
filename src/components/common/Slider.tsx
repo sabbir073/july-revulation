@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const slides = [
   {
     src: `${process.env.NEXT_PUBLIC_IMAGE_URL}/slider1.jpg`,
     alt: "Slide 1",
-    title: "Long Live The Revulation!",
+    title: "Long Live The Revolution!",
     subtitle: "Remembering All The Heroes of July",
   },
   {
@@ -26,8 +26,9 @@ const slides = [
 
 const Slider: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const hasTrackedVisitor = useRef(false); // To prevent multiple tracking
 
-  // Automatically change the slide every 3 seconds
+  // Automatically change the slide every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
@@ -36,9 +37,34 @@ const Slider: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Track visitor function
+  const trackVisitor = async () => {
+    try {
+      // Fetch the public IP address
+      const ipResponse = await fetch("https://api64.ipify.org?format=json");
+      const { ip } = await ipResponse.json();
+
+      // Send visitor data to the backend for processing
+      await fetch("/api/track-visitor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ip }),
+      });
+    } catch (error) {
+      console.error("Error tracking visitor:", error);
+    }
+  };
+
+  // Track visitor on initial render
+  useEffect(() => {
+    if (!hasTrackedVisitor.current) {
+      hasTrackedVisitor.current = true; // Mark as tracked
+      trackVisitor();
+    }
+  }, []);
+
   return (
     <div className="relative w-full h-[300px] md:h-[550px]">
-
       {/* Image Slider */}
       {slides.map((slide, index) => (
         <div
@@ -51,7 +77,7 @@ const Slider: React.FC = () => {
             src={slide.src}
             alt={slide.alt}
             fill={true}
-            style={{objectFit: "cover"}}
+            style={{ objectFit: "cover" }}
             priority={true}
             className="w-full h-full object-cover"
           />

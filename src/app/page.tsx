@@ -8,11 +8,12 @@ import HeroSection from '@/components/common/HeroSection';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'July Revulation Allience',
+  title: 'July Revulationary Alliance',
   description: 'Know the history of July revulation in Bangladesh.',
 }
 
 export default function DashboardPage() {
+  
   return (
     <HomeLayout>
       <Slider />

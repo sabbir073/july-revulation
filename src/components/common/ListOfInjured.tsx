@@ -220,7 +220,6 @@ const ListOfInjured: React.FC = () => {
       const data = await response.json();
 
       if (data.success) {
-        console.log(data);
         setPeople(reset ? data.people : [...people, ...data.people]);
         setTotalCount(data.totalCount);
         if (reset) setSkip(take); // Reset skip for new data
