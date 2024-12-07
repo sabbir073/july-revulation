@@ -5,7 +5,7 @@ import ListOfMartyres from '@/components/common/ListOfMartyres';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Martyrs | July Revulation Allience',
+  title: 'Martyrs | July Revulationary Alliance',
   description: 'Know the history of July revulation in Bangladesh.',
 }
 

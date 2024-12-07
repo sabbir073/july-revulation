@@ -5,7 +5,7 @@ import ListOfInjured from '@/components/common/ListOfInjured';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Injured | July Revulation Allience',
+  title: 'Injured | July Revulationary Alliance',
   description: 'Know the history of July revulation in Bangladesh.',
 }
 
