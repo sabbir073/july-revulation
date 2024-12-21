@@ -105,7 +105,7 @@ export async function GET(req: NextRequest) {
       },
       skip,
       take,
-      orderBy: { created_at: "desc" },
+      orderBy: { date: "asc" },
     });
 
     const totalCount = await prisma.people.count({ where: whereCondition });
