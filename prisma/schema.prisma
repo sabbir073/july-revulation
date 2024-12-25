@@ -42,6 +42,7 @@ model People {
   occupation_id         Int?
   institution           Institution?       @relation(fields: [institution_id], references: [id])
   institution_id        Int?
+  nid                   String?
   address               String?
   fathers_name          String?
   mothers_name          String?

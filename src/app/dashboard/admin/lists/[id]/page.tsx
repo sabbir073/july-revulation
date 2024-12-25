@@ -18,6 +18,7 @@ interface Person {
     occupation: { title: string } | null;
     institution: { title: string } | null;
     address: string | null;
+    nid: string | null;
     fathers_name: string | null;
     mothers_name: string | null;
     date: string | null;
@@ -164,6 +165,12 @@ export default function PersonProfile() {
                         <div className="bg-[#d9f99d] p-4 rounded shadow-lg flex">
                             <div className="w-[200px] font-semibold text-left">Address:</div>
                             <div className="flex-1 text-left">{person.address}</div>
+                        </div>
+                    )}
+                    {person?.nid && (
+                        <div className="bg-[#c5cae9] p-4 rounded shadow-lg flex">
+                            <div className="w-[200px] font-semibold text-left">NID/BC:</div>
+                            <div className="flex-1 text-left">{person.nid}</div>
                         </div>
                     )}
                     {person?.family_member_contact && (

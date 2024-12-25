@@ -45,6 +45,7 @@ export default function AdminAddNewPeople() {
     occupation_id: "",
     institution_id: "",
     address: "",
+    nid: "",
     fathers_name: "",
     mothers_name: "",
     date: "",
@@ -149,6 +150,7 @@ export default function AdminAddNewPeople() {
           occupation_id: "",
           institution_id: "",
           address: "",
+          nid: "",
           fathers_name: "",
           mothers_name: "",
           date: "",
@@ -211,6 +213,12 @@ export default function AdminAddNewPeople() {
                 type: "select",
                 options: GENDER_TYPES.map((gn) => ({ value: gn, label: gn })),
                 required: true,
+              },
+              {
+                label: "NID/BC",
+                name: "nid",
+                type: "text",
+                placeholder: "Type NID or Birth Certificate"
               },
               { label: "Family Contact", name: "family_member_contact", type: "text", placeholder: "Family contact" },
               {

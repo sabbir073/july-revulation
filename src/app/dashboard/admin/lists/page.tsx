@@ -19,6 +19,7 @@ interface Person {
   occupation: { title: string } | null;
   institution: { title: string } | null;
   address: string | null;
+  nid: string | null;
   fathers_name: string | null;
   mothers_name: string | null;
   date: string | null;

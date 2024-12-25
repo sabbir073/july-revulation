@@ -64,6 +64,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
           occupation_id: data.occupation_id ? Number(data.occupation_id) : null,
           institution_id: data.institution_id ? Number(data.institution_id) : null,
           address: data.address || null,
+          nid: data.nid || null,
           fathers_name: data.fathers_name || null,
           mothers_name: data.mothers_name || null,
           date: data.date ? new Date(data.date) : null,
