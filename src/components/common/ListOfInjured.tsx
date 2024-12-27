@@ -150,7 +150,7 @@ const Card: React.FC<{ person: Person }> = ({ person }) => (
           <strong className="font-semibold">Occupation:</strong> {person.occupation?.title || "N/A"}
         </p>
         <p className="text-sm text-gray-600 mb-1">
-          <strong className="font-semibold">Type:</strong>{"Martyr"}
+          <strong className="font-semibold">Type:</strong>{"Injured"}
         </p>
       </div>
     </div>
