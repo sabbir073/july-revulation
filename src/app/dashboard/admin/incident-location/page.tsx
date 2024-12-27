@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -22,13 +23,16 @@ export default function AdminManageIncidentLocations() {
   const [loading, setLoading] = useState(true);
   const [newIncidentLocationTitle, setNewIncidentLocationTitle] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false);
 
   const fetchIncidentLocations = async () => {
+    if (hasFetchedInitialData) return; // Avoid multiple fetches for initial data
     try {
       setLoading(true);
       const response = await fetch("/api/incident-locations");
       const incidentLocations = await response.json();
       setIncidentLocations(incidentLocations);
+      setHasFetchedInitialData(true); // Mark initial data as fetched
     } catch (error) {
       console.error("Error fetching incident locations:", error);
     } finally {

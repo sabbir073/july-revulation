@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -22,13 +23,16 @@ export default function AdminManageOccupations() {
   const [loading, setLoading] = useState(true);
   const [newOccupationTitle, setNewOccupationTitle] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false);
 
   const fetchOccupations = async () => {
+    if (hasFetchedInitialData) return; // Avoid multiple fetches for initial data
     try {
       setLoading(true);
       const response = await fetch("/api/occupations");
       const occupations = await response.json();
       setOccupations(occupations);
+      setHasFetchedInitialData(true); // Mark initial data as fetched
     } catch (error) {
       console.error("Error fetching occupations:", error);
     } finally {

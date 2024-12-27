@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -22,13 +23,16 @@ export default function AdminManageInstitutions() {
   const [loading, setLoading] = useState(true);
   const [newInstitutionTitle, setNewInstitutionTitle] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false);
 
   const fetchInstitutions = async () => {
+    if (hasFetchedInitialData) return; // Avoid multiple fetches for initial data
     try {
       setLoading(true);
       const response = await fetch("/api/institutions");
       const institutions = await response.json();
       setInstitutions(institutions);
+      setHasFetchedInitialData(true); // Mark initial data as fetched
     } catch (error) {
       console.error("Error fetching institutions:", error);
     } finally {

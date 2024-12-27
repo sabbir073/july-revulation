@@ -44,6 +44,7 @@ model People {
   institution_id        Int?
   nid                   String?
   address               String?
+  permanent_address     String?
   fathers_name          String?
   mothers_name          String?
   date                  DateTime?

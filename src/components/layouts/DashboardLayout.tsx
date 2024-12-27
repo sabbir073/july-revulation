@@ -74,6 +74,7 @@ const handleLanguageChange = async (lang: string) => {
         items.push({ title: "Incident Location", icon: FiPlusSquare, path: `${basePath}/incident-location` });
         items.push({ title: "Documentary", icon: FiPlusSquare, path: `${basePath}/documentary` });
         items.push({ title: "Users", icon: FiPlusSquare, path: `${basePath}/users` });
+        items.push({ title: "Import/Export", icon: FiPlusSquare, path: `${basePath}/import` });
         items.push({ title: "Visitor Details", icon: FiPlusSquare, path: `${basePath}/visitor` });
         
       }

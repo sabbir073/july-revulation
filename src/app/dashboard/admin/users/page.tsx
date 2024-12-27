@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -29,9 +30,29 @@ export default function AdminManageUsers() {
   const [loadingSearch, setLoadingSearch] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState("");
+  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false);
 
   // Fetch all users
   const fetchUsers = async () => {
+    if (hasFetchedInitialData) return; // Avoid multiple fetches for initial data
+    try {
+      setLoading(true);
+      const response = await fetch("/api/users");
+      const data = await response.json();
+      if (data.success) {
+        setUsersData(data.users);
+        setHasFetchedInitialData(true); // Mark initial data as fetched
+      } else {
+        console.error("Error fetching users:", data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchUsers2 = async () => {
     try {
       setLoading(true);
       const response = await fetch("/api/users");
@@ -79,7 +100,7 @@ export default function AdminManageUsers() {
     if (value) {
       fetchSearchData(value);
     } else {
-      fetchUsers();
+      fetchUsers2();
     }
   };
 

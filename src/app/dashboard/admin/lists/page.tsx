@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // app/dashboard/admin/AdminSeeLists.tsx
 "use client";
 
@@ -19,6 +20,7 @@ interface Person {
   occupation: { title: string } | null;
   institution: { title: string } | null;
   address: string | null;
+  permanent_address: string | null;
   nid: string | null;
   fathers_name: string | null;
   mothers_name: string | null;
@@ -44,15 +46,37 @@ export default function AdminSeeLists() {
   const [loadingSearch, setLoadingSearch] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState("");
+  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false);
 
   // Fetch initial data without search query
   const fetchInitialData = async () => {
+    if (hasFetchedInitialData) return; // Avoid multiple fetches for initial data
     try {
       setLoading(true);
       const response = await fetch("/api/people");
       const data = await response.json();
       if (data.success) {
         setPeopleData(data.people);
+        setHasFetchedInitialData(true); // Mark initial data as fetched
+      } else {
+        console.error("Error fetching initial data:", data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching initial data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchInitialData2 = async () => {
+    
+    try {
+      setLoading(true);
+      const response = await fetch("/api/people");
+      const data = await response.json();
+      if (data.success) {
+        setPeopleData(data.people);
+        
       } else {
         console.error("Error fetching initial data:", data.error);
       }
@@ -94,7 +118,7 @@ export default function AdminSeeLists() {
     if (value) {
       fetchSearchData(value);
     } else {
-      fetchInitialData();
+      fetchInitialData2();
     }
   }, 500);
 

@@ -18,6 +18,7 @@ interface Person {
     occupation: { title: string } | null;
     institution: { title: string } | null;
     address: string | null;
+    permanent_address: string | null;
     nid: string | null;
     fathers_name: string | null;
     mothers_name: string | null;
@@ -44,7 +45,7 @@ export default function PersonProfile() {
     const { id } = useParams();
     const [person, setPerson] = useState<Person | null>(null);
     const [loading, setLoading] = useState(true);
-
+    const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -58,11 +59,13 @@ export default function PersonProfile() {
     }, [status, router, session]);
 
     const fetchPersonData = async () => {
+        if (hasFetchedInitialData) return; // Avoid multiple fetches for initial data
         try {
             const response = await fetch(`/api/people/${id}`);
             const data = await response.json();
             if (data.success) {
                 setPerson(data.person);
+                setHasFetchedInitialData(true); // Mark initial data as fetched
             } else {
                 router.push("/not-found");
             }
@@ -163,8 +166,14 @@ export default function PersonProfile() {
                     )}
                     {person?.address && (
                         <div className="bg-[#d9f99d] p-4 rounded shadow-lg flex">
-                            <div className="w-[200px] font-semibold text-left">Address:</div>
+                            <div className="w-[200px] font-semibold text-left">Present Address:</div>
                             <div className="flex-1 text-left">{person.address}</div>
+                        </div>
+                    )}
+                    {person?.permanent_address && (
+                        <div className="bg-[#ffcdd2] p-4 rounded shadow-lg flex">
+                            <div className="w-[200px] font-semibold text-left">Permanent Address:</div>
+                            <div className="flex-1 text-left">{person.permanent_address}</div>
                         </div>
                     )}
                     {person?.nid && (
